@@ -1,4 +1,5 @@
 name: Deploy to CF Pages
+# [32c] 2026-08-23 部署链路验证 commit（本行注释仅触发 push 验证，无逻辑变更）
 
 on:
   push:
