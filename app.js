@@ -41,7 +41,9 @@
       code: 'HTTP',
       ok: 'OK',
       fail: 'FAIL',
-      ms: 'ms'
+      ms: 'ms',
+      themeLight: 'Light',
+      themeDark: 'Dark'
     },
     zh: {
       collecting: '数据收集中…',
@@ -77,7 +79,9 @@
       code: 'HTTP',
       ok: '成功',
       fail: '失败',
-      ms: '毫秒'
+      ms: '毫秒',
+      themeLight: '亮色',
+      themeDark: '暗色'
     }
   };
 
@@ -86,6 +90,55 @@
   if (!I18N[lang]) lang = 'en';
 
   function t(key) { return I18N[lang][key] || I18N.en[key] || key; }
+
+  /* ---------- 明暗主题（与官网同机制：gavinlab-theme-v2 跨站同步，
+     data-theme 属性 + 系统偏好跟随至手动切换；图标文案走内置字典） ---------- */
+  var THEME_KEY = 'gavinlab-theme-v2';
+  var themeManual = false;
+  try { themeManual = !!localStorage.getItem(THEME_KEY); } catch (e) {}
+
+  function themeIcon(isDark) {
+    // lucide moon / sun，固定 14px，stroke currentColor
+    return isDark
+      ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>'
+      : '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  }
+
+  function currentTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  function syncThemeBtn() {
+    var btn = document.getElementById('themeBtn');
+    if (!btn) return;
+    var dark = currentTheme() === 'dark';
+    // 暗色下显示「亮色」（点击回到亮色），与官网 themeBtn 行为一致
+    btn.innerHTML = themeIcon(!dark) +
+      '<span class="theme-btn-txt">' + esc(t(dark ? 'themeLight' : 'themeDark')) + '</span>';
+    btn.setAttribute('aria-label', t(dark ? 'themeLight' : 'themeDark'));
+  }
+
+  function initThemeToggle() {
+    var btn = document.getElementById('themeBtn');
+    if (!btn) return;
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var onSysChange = function (e) {
+      if (!themeManual) { applyTheme(e.matches ? 'dark' : 'light'); syncThemeBtn(); }
+    };
+    if (mq.addEventListener) mq.addEventListener('change', onSysChange);
+    else if (mq.addListener) mq.addListener(onSysChange);
+    btn.addEventListener('click', function () {
+      themeManual = true;
+      var next = currentTheme() === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+      syncThemeBtn();
+    });
+  }
 
   function applyStaticI18n() {
     document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
@@ -98,6 +151,7 @@
     }
     var btn = document.getElementById('lang-toggle');
     btn.textContent = lang === 'zh' ? 'EN' : '中文';
+    syncThemeBtn();
   }
 
   function esc(s) {
@@ -156,6 +210,9 @@
       : '';
   }
 
+  /* lucide chevron-right：固定 12px，stroke currentColor，禁 unicode 字符图标 */
+  var CARET_SVG = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+
   function renderComponents(data) {
     var list = document.getElementById('component-list');
     list.innerHTML = '';
@@ -170,7 +227,7 @@
 
       var st = statusClass(c.status);
       row.innerHTML =
-        '<span class="component-name"><span class="caret">▶</span>' + esc(compName(c)) + '</span>' +
+        '<span class="component-name"><span class="caret">' + CARET_SVG + '</span>' + esc(compName(c)) + '</span>' +
         '<span class="badge badge-' + st + '">' +
           '<span class="status-dot dot-' + st + '"></span>' + esc(t(st)) + '</span>' +
         '<span class="component-metrics">' +
@@ -283,7 +340,7 @@
         '</div>' +
         '<div class="incident-meta">' +
           esc(fmtTime(inc.started)) +
-          (resolved ? ' → ' + esc(fmtTime(inc.resolved)) : '') +
+          (resolved ? ' – ' + esc(fmtTime(inc.resolved)) : '') +
           ' · ' + t('affected') + ': ' + esc(affected || '—') +
           ' · ' + esc(t(inc.severity === 'minor' ? 'minor' : 'major')) +
           (typeof inc.failed_checks === 'number' ? ' · ' + inc.failed_checks + ' ' + t('failedChecks') : '') +
@@ -328,6 +385,8 @@
   });
 
   applyStaticI18n();
+  initThemeToggle();
+  syncThemeBtn();
   load();
   setInterval(load, REFRESH_MS);
 })();
