@@ -34,6 +34,15 @@ jobs:
             --exclude '*.md' --exclude 'test/' --exclude 'scripts/' \
             --exclude '.gitignore' --exclude 'package*.json' ./ dist/
 
+      # [0823-sp-3] 缓存链路修复：资源 URL 注入 ?v=<sha>，每次部署 URL 变化 → 浏览器/边缘强制拉新，
+      # 避免部署后用户仍看缓存旧版（max-age=14400 + ETag REVALIDATED 的旧病根）
+      - name: Inject cache-busting version into index.html
+        run: |
+          SHA="${GITHUB_SHA:0:8}"
+          sed -i "s|\./style\.css|./style.css?v=${SHA}|; s|\./app\.js|./app.js?v=${SHA}|" dist/index.html
+          echo "--- injected asset refs ---"
+          grep -oE '(href|src)="[^"]*\.(css|js)"' dist/index.html
+
       - name: Deploy to Cloudflare Pages
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -43,3 +52,24 @@ jobs:
             --project-name status-page \
             --branch main \
             --commit-dirty=true
+
+      # [0823-sp-3] 部署后立即 purge zone 缓存（兜底）：即使边缘仍有旧资源残留，
+      # 也保证新版本即刻生效，用户无需手动清缓存/硬刷新
+      - name: Purge Cloudflare zone cache
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          ZONE_ID=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/zones?name=hermes.cc.cd" \
+            | jq -r '.result[0].id')
+          if [ -z "$ZONE_ID" ] || [ "$ZONE_ID" = "null" ]; then
+            echo "::error::zone hermes.cc.cd not found, aborting"
+            exit 1
+          fi
+          echo "purging zone $ZONE_ID (hermes.cc.cd)"
+          curl -s -X POST -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d '{"purge_everything":true}' \
+            "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/purge_cache" \
+            | jq -e '.success == true'
+          echo "zone cache purged"
