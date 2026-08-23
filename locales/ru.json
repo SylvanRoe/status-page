@@ -39,5 +39,7 @@
   "timeS": "с",
   "timeM": "мин",
   "timeH": "ч",
-  "timeD": "д"
+  "timeD": "д",
+  "themeLight": "Светлая",
+  "themeDark": "Тёмная"
 }

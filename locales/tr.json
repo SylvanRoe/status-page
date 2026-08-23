@@ -39,5 +39,7 @@
   "timeS": "sn",
   "timeM": "dk",
   "timeH": "sa",
-  "timeD": "gün"
+  "timeD": "gün",
+  "themeLight": "Açık",
+  "themeDark": "Koyu"
 }

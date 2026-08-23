@@ -49,7 +49,9 @@ D = {
     "timeS": "秒",
     "timeM": "分",
     "timeH": "时",
-    "timeD": "天"
+    "timeD": "天",
+    "themeLight": "亮色",
+    "themeDark": "暗色"
   },
   "en": {
     "collecting": "Collecting data…",
@@ -92,7 +94,9 @@ D = {
     "timeS": "s",
     "timeM": "m",
     "timeH": "h",
-    "timeD": "d"
+    "timeD": "d",
+    "themeLight": "Light",
+    "themeDark": "Dark"
   },
   "ja": {
     "collecting": "データ収集中…",
@@ -135,7 +139,9 @@ D = {
     "timeS": "秒",
     "timeM": "分",
     "timeH": "時間",
-    "timeD": "日"
+    "timeD": "日",
+    "themeLight": "ライト",
+    "themeDark": "ダーク"
   },
   "ko": {
     "collecting": "데이터 수집 중…",
@@ -178,7 +184,9 @@ D = {
     "timeS": "초",
     "timeM": "분",
     "timeH": "시",
-    "timeD": "일"
+    "timeD": "일",
+    "themeLight": "라이트",
+    "themeDark": "다크"
   },
   "fr": {
     "collecting": "Collecte des données…",
@@ -221,7 +229,9 @@ D = {
     "timeS": "s",
     "timeM": "min",
     "timeH": "h",
-    "timeD": "j"
+    "timeD": "j",
+    "themeLight": "Clair",
+    "themeDark": "Sombre"
   },
   "de": {
     "collecting": "Daten werden gesammelt…",
@@ -264,7 +274,9 @@ D = {
     "timeS": "s",
     "timeM": "Min",
     "timeH": "Std.",
-    "timeD": "T"
+    "timeD": "T",
+    "themeLight": "Hell",
+    "themeDark": "Dunkel"
   },
   "ar": {
     "collecting": "جمع البيانات…",
@@ -307,7 +319,9 @@ D = {
     "timeS": "ث",
     "timeM": "د",
     "timeH": "س",
-    "timeD": "ي"
+    "timeD": "ي",
+    "themeLight": "فاتح",
+    "themeDark": "داكن"
   },
   "ru": {
     "collecting": "Сбор данных…",
@@ -350,7 +364,9 @@ D = {
     "timeS": "с",
     "timeM": "мин",
     "timeH": "ч",
-    "timeD": "д"
+    "timeD": "д",
+    "themeLight": "Светлая",
+    "themeDark": "Тёмная"
   },
   "es": {
     "collecting": "Recopilando datos…",
@@ -393,7 +409,9 @@ D = {
     "timeS": "s",
     "timeM": "min",
     "timeH": "h",
-    "timeD": "d"
+    "timeD": "d",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro"
   },
   "tr": {
     "collecting": "Veri toplanıyor…",
@@ -436,7 +454,9 @@ D = {
     "timeS": "sn",
     "timeM": "dk",
     "timeH": "sa",
-    "timeD": "gün"
+    "timeD": "gün",
+    "themeLight": "Açık",
+    "themeDark": "Koyu"
   },
   "pl": {
     "collecting": "Zbieranie danych…",
@@ -479,7 +499,9 @@ D = {
     "timeS": "s",
     "timeM": "min",
     "timeH": "godz",
-    "timeD": "dni"
+    "timeD": "dni",
+    "themeLight": "Jasny",
+    "themeDark": "Ciemny"
   },
   "pt": {
     "collecting": "Coletando dados…",
@@ -522,7 +544,9 @@ D = {
     "timeS": "s",
     "timeM": "min",
     "timeH": "h",
-    "timeD": "d"
+    "timeD": "d",
+    "themeLight": "Claro",
+    "themeDark": "Escuro"
   },
 }
 

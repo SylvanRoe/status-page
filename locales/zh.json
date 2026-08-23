@@ -39,5 +39,7 @@
   "timeS": "秒",
   "timeM": "分",
   "timeH": "时",
-  "timeD": "天"
+  "timeD": "天",
+  "themeLight": "亮色",
+  "themeDark": "暗色"
 }

@@ -39,5 +39,7 @@
   "timeS": "ث",
   "timeM": "د",
   "timeH": "س",
-  "timeD": "ي"
+  "timeD": "ي",
+  "themeLight": "فاتح",
+  "themeDark": "داكن"
 }

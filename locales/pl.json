@@ -39,5 +39,7 @@
   "timeS": "s",
   "timeM": "min",
   "timeH": "godz",
-  "timeD": "dni"
+  "timeD": "dni",
+  "themeLight": "Jasny",
+  "themeDark": "Ciemny"
 }

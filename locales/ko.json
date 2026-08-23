@@ -39,5 +39,7 @@
   "timeS": "초",
   "timeM": "분",
   "timeH": "시",
-  "timeD": "일"
+  "timeD": "일",
+  "themeLight": "라이트",
+  "themeDark": "다크"
 }

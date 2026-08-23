@@ -39,5 +39,7 @@
   "timeS": "s",
   "timeM": "Min",
   "timeH": "Std.",
-  "timeD": "T"
+  "timeD": "T",
+  "themeLight": "Hell",
+  "themeDark": "Dunkel"
 }

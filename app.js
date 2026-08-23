@@ -1,6 +1,7 @@
 /* Hermes Status — vanilla JS renderer for status.json (schema v1).
    No frameworks, no external requests except same-origin ./status.json + ./locales/*.json.
 
+   0823-sp-1：明暗主题（gavinlab-theme-v2 跨站同步，data-theme 属性 + 系统偏好跟随至手动切换）。
    0823-sp-2 多语言机制对齐官网（company-site/ui.js 公共组件）：
    ① 语言检测优先级：?lang=xx → localStorage site-lang-v2 → 旧 status-lang（兼容迁移）→ navigator.languages → zh
    ② langBtn+langMenu 12 语切换：点击 .lang-opt → 写 site-lang-v2 → URL ?lang= 同步（replaceState）→ reload
@@ -30,7 +31,8 @@
       time: '时间', result: '结果', latency: '延迟', code: 'HTTP', ok: '成功', fail: '失败', ms: '毫秒',
       langAria: '选择语言', metaTitle: 'Hermes Status — 服务可用性',
       metaDescription: 'Hermes 公开服务的实时可用性与 90 天运行历史：官网、OPC API、MRD 面板、博客与 API 网关。',
-      timeS: '秒', timeM: '分', timeH: '时', timeD: '天'
+      timeS: '秒', timeM: '分', timeH: '时', timeD: '天',
+      themeLight: '亮色', themeDark: '暗色'
     },
     en: {
       collecting: 'Collecting data…', allOperational: 'All systems operational', someDegraded: 'Some systems degraded',
@@ -45,7 +47,8 @@
       time: 'Time', result: 'Result', latency: 'Latency', code: 'HTTP', ok: 'OK', fail: 'FAIL', ms: 'ms',
       langAria: 'Select language', metaTitle: 'Hermes Status — Service Availability',
       metaDescription: 'Real-time availability and 90-day uptime history for Hermes public services: website, OPC API, MRD dashboard, blog and API gateway.',
-      timeS: 's', timeM: 'm', timeH: 'h', timeD: 'd'
+      timeS: 's', timeM: 'm', timeH: 'h', timeD: 'd',
+      themeLight: 'Light', themeDark: 'Dark'
     }
   };
 
@@ -88,6 +91,55 @@
 
   function locale() { return LOCALE_MAP[lang] || lang; }
 
+  /* ---------- 明暗主题（与官网同机制：gavinlab-theme-v2 跨站同步，
+     data-theme 属性 + 系统偏好跟随至手动切换；图标文案走 t() 语言包） ---------- */
+  var THEME_KEY = 'gavinlab-theme-v2';
+  var themeManual = false;
+  try { themeManual = !!localStorage.getItem(THEME_KEY); } catch (e) {}
+
+  function themeIcon(isDark) {
+    // lucide moon / sun，固定 14px，stroke currentColor
+    return isDark
+      ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>'
+      : '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+  }
+
+  function currentTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  function syncThemeBtn() {
+    var btn = document.getElementById('themeBtn');
+    if (!btn) return;
+    var dark = currentTheme() === 'dark';
+    // 暗色下显示「亮色」（点击回到亮色），与官网 themeBtn 行为一致
+    btn.innerHTML = themeIcon(!dark) +
+      '<span class="theme-btn-txt">' + esc(t(dark ? 'themeLight' : 'themeDark')) + '</span>';
+    btn.setAttribute('aria-label', t(dark ? 'themeLight' : 'themeDark'));
+  }
+
+  function initThemeToggle() {
+    var btn = document.getElementById('themeBtn');
+    if (!btn) return;
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var onSysChange = function (e) {
+      if (!themeManual) { applyTheme(e.matches ? 'dark' : 'light'); syncThemeBtn(); }
+    };
+    if (mq.addEventListener) mq.addEventListener('change', onSysChange);
+    else if (mq.addListener) mq.addListener(onSysChange);
+    btn.addEventListener('click', function () {
+      themeManual = true;
+      var next = currentTheme() === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+      syncThemeBtn();
+    });
+  }
+
   /* ---------- 静态 i18n 应用（title/meta/data-i18n/data-i18n-aria/langCur/html lang/dir） ---------- */
   function applyStaticI18n() {
     var de = document.documentElement;
@@ -118,6 +170,7 @@
     }
     var cur = document.getElementById('langCur');
     if (cur) cur.textContent = LANG_NAMES[lang] || lang;
+    syncThemeBtn(); // 主题按钮文案随语言包刷新
   }
 
   /* ---------- 语言包加载（缓存命中同步应用零闪烁；fetch 失败回退 zh → 内置兜底） ---------- */
@@ -247,6 +300,9 @@
       : '';
   }
 
+  /* lucide chevron-right：固定 12px，stroke currentColor，禁 unicode 字符图标 */
+  var CARET_SVG = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+
   function renderComponents(data) {
     var list = document.getElementById('component-list');
     list.innerHTML = '';
@@ -261,7 +317,7 @@
 
       var st = statusClass(c.status);
       row.innerHTML =
-        '<span class="component-name"><span class="caret">▶</span>' + esc(compName(c)) + '</span>' +
+        '<span class="component-name"><span class="caret">' + CARET_SVG + '</span>' + esc(compName(c)) + '</span>' +
         '<span class="badge badge-' + st + '">' +
           '<span class="status-dot dot-' + st + '"></span>' + esc(t(st)) + '</span>' +
         '<span class="component-metrics">' +
@@ -414,6 +470,7 @@
   /* ---------- boot ---------- */
   applyStaticI18n();
   initLang();
+  initThemeToggle();
   loadI18n(); // 内部 applyDict → load()；语言包失败也会走兜底渲染
   setInterval(load, REFRESH_MS);
 })();
