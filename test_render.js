@@ -1,6 +1,7 @@
 // Node DOM-stub smoke test for app.js — verifies render against mock status.json.
 // 0823-sp-2: i18n 机制升级适配 — URL 感知 fetch（locales/*.json 语言包 + status.json）、
 // langBtn/langMenu 交互、site-lang-v2 持久化、no-undefined 断言。
+// 0823-sp-2a-fix: langBtn aria-expanded 动态管理断言（初始 false / 打开 true / 外部点击关闭 false）。
 // Usage: node test_render.js [zh|en|missing]
 'use strict';
 const fs = require('fs');
@@ -55,6 +56,8 @@ ids.forEach(id => { byId[id] = new El('div'); });
 global.document = {
   documentElement: {},
   title: '',
+  listeners: {},
+  addEventListener(t, f) { this.listeners[t] = f; },
   getElementById: id => byId[id] || null,
   createElement: tag => new El(tag),
   querySelectorAll: () => [],
@@ -167,8 +170,19 @@ setTimeout(() => {
   // ---- langBtn/langMenu 交互断言 ----
   const langBtn = byId['langBtn'];
   const langMenu = byId['langMenu'];
+  res.ariaExpandedInit = langBtn.getAttribute('aria-expanded'); // 初始应为 'false'
   langBtn.listeners.click({ stopPropagation() {} });
   res.menuOpenAfterClick = langMenu.className.includes('open');
+  res.ariaExpandedOpen = langBtn.getAttribute('aria-expanded'); // 打开后应为 'true'
+  // 外部点击关闭 → aria-expanded 回 false
+  document.listeners.click({ stopPropagation() {} });
+  res.menuClosedByOutsideClick = !langMenu.className.includes('open');
+  res.ariaExpandedClose = langBtn.getAttribute('aria-expanded'); // 关闭后应为 'false'
+  // 再点开，点当前语言 → 关闭菜单 + aria-expanded=false + 不 reload
+  langBtn.listeners.click({ stopPropagation() {} });
+  const curOpt = langOpts.find(o => o.getAttribute('data-lang') === (mode === 'zh' ? 'zh' : 'en'));
+  curOpt.listeners.click({});
+  res.ariaExpandedAfterSameLang = langBtn.getAttribute('aria-expanded');
   // active 高亮：当前语言 option 应为 active
   const activeOpts = langOpts.filter(o => o.className.includes('active'));
   res.activeLang = activeOpts.length === 1 ? activeOpts[0].getAttribute('data-lang') : null;
@@ -181,9 +195,10 @@ setTimeout(() => {
   res.reloaded = reloaded === true;
   // 点击已激活语言 → 不 reload 只关菜单
   reloaded = false;
-  const curOpt = langOpts.find(o => o.getAttribute('data-lang') === (mode === 'zh' ? 'zh' : 'en'));
   // 先重新打开菜单（模拟真实交互链），再点当前语言
-  curOpt.listeners.click({});
+  langBtn.listeners.click({ stopPropagation() {} });
+  const curOpt2 = langOpts.find(o => o.getAttribute('data-lang') === (mode === 'zh' ? 'zh' : 'en'));
+  curOpt2.listeners.click({});
   res.noReloadOnSameLang = reloaded === false;
 
   res.ok =
@@ -197,7 +212,10 @@ setTimeout(() => {
     res.noUndefined &&
     res.htmlLang === (mode === 'zh' ? 'zh' : 'en') &&
     res.langCur === (mode === 'zh' ? '中文' : 'English') &&
-    res.menuOpenAfterClick &&
+    res.ariaExpandedInit === 'false' &&
+    res.menuOpenAfterClick && res.ariaExpandedOpen === 'true' &&
+    res.menuClosedByOutsideClick && res.ariaExpandedClose === 'false' &&
+    res.ariaExpandedAfterSameLang === 'false' &&
     res.activeLang === (mode === 'zh' ? 'zh' : 'en') &&
     res.persistedLang === targetLang &&
     res.urlSynced && res.reloaded &&

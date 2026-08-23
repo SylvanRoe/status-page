@@ -39,7 +39,11 @@ window.__I18N_VER = 2;
     if (!lang) {
       var old = null;
       try { old = localStorage.getItem('status-lang'); } catch (e) {}
-      if (old && map[old]) lang = old;
+      if (old && map[old]) {
+        lang = old;
+        // 旧 status-lang 迁移：写回 site-lang-v2 完成真迁移（下次起新 key 优先，旧 key 自然淘汰）
+        try { localStorage.setItem('site-lang-v2', old); } catch (e5) {}
+      }
     }
     if (!lang) {
       var al = (navigator.languages || [navigator.language || 'zh']).map(function (x) {
@@ -80,7 +84,7 @@ window.__I18N_VER = 2;
     <div class="header-actions">
       <button id="themeBtn" class="theme-btn" type="button" aria-label="切换主题"></button>
       <div class="lang-wrap">
-        <button class="theme-btn" id="langBtn" type="button" aria-label="选择语言" aria-haspopup="listbox" data-i18n-aria="langAria">
+        <button class="theme-btn" id="langBtn" type="button" aria-label="选择语言" aria-haspopup="listbox" aria-expanded="false" data-i18n-aria="langAria">
           <svg class="lang-btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           <span class="lang-cur" id="langCur">中文</span>
           <svg class="lang-btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>

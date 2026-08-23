@@ -2,6 +2,11 @@
 
 本仓版本制度（资产版本制度 v1.0，2026-08-23 落地）：版本号 = git tag `vX.Y.Z` + 本文件条目；语义 semver（主.次.补丁）。
 
+## [v0.2.1] - 2026-08-23
+### Fixed
+- 0823-sp-2a（验收 FAIL 返工）：langBtn 补 aria-expanded 动态管理（open=true/close=false，与 .lang-menu.open 同步）— index.html 静态初始 false + app.js syncLangAria()（按钮点击开合/外部点击关闭/点当前语言关闭全路径同步）；test_render.js 增 aria-expanded 三态断言防回归
+- D8 观察项：旧 status-lang 迁移补写回 site-lang-v2（head bootstrap + app.js detectLang 双路径，完成真迁移，旧 key 保留）
+
 ## [v0.2.0] - 2026-08-23
 ### Added
 - 0823-sp-2：多语言机制对齐官网（company-site/ui.js 公共组件同构）：

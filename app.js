@@ -67,7 +67,7 @@
       }
     } catch (e) {}
     try { var sv = localStorage.getItem('site-lang-v2'); if (sv && LANG_MAP[sv]) return sv; } catch (e) {}
-    try { var old = localStorage.getItem('status-lang'); if (old && LANG_MAP[old]) return old; } catch (e) {}
+    try { var old = localStorage.getItem('status-lang'); if (old && LANG_MAP[old]) { try { localStorage.setItem('site-lang-v2', old); } catch (e5) {} return old; } } catch (e) {}
     try {
       var al = (navigator.languages || [navigator.language || 'zh']).map(function (x) {
         return String(x).toLowerCase().split('-')[0];
@@ -218,9 +218,14 @@
     var langBtn = document.getElementById('langBtn');
     var langMenu = document.getElementById('langMenu');
     if (!langBtn || !langMenu) return;
-    langBtn.addEventListener('click', function (e) { e.stopPropagation(); langMenu.classList.toggle('open'); });
+    // aria-expanded 动态管理（与 .lang-menu.open 同步：open=true / close=false，验收 A1）
+    function syncLangAria() {
+      langBtn.setAttribute('aria-expanded', langMenu.classList.contains('open') ? 'true' : 'false');
+    }
+    syncLangAria(); // 初始同步（菜单默认关闭 → false，与 index.html 静态初始值一致）
+    langBtn.addEventListener('click', function (e) { e.stopPropagation(); langMenu.classList.toggle('open'); syncLangAria(); });
     if (document.addEventListener) {
-      document.addEventListener('click', function () { langMenu.classList.remove('open'); });
+      document.addEventListener('click', function () { langMenu.classList.remove('open'); syncLangAria(); });
     }
     langMenu.addEventListener('click', function (e) { e.stopPropagation(); });
     var opts = langMenu.querySelectorAll ? langMenu.querySelectorAll('.lang-opt') : [];
@@ -229,7 +234,7 @@
         b.classList.toggle('active', b.getAttribute('data-lang') === lang);
         b.addEventListener('click', function () {
           var l = b.getAttribute('data-lang');
-          if (l === lang) { langMenu.classList.remove('open'); return; }
+          if (l === lang) { langMenu.classList.remove('open'); syncLangAria(); return; }
           try { localStorage.setItem('site-lang-v2', l); } catch (e) {}
           try { // ?lang= URL 同步（replaceState 保留其它参数），分享链接携带语言、刷新保持
             if (typeof location !== 'undefined' && history.replaceState) {
