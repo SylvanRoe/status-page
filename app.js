@@ -1,4 +1,4 @@
-/* Hermes Status — vanilla JS renderer for status.json (schema v1).
+/* Gavin's Lab Status — vanilla JS renderer for status.json (schema v1).
    No frameworks, no external requests except same-origin ./status.json + ./locales/*.json.
 
    0823-sp-1：明暗主题（gavinlab-theme-v2 跨站同步，data-theme 属性 + 系统偏好跟随至手动切换）。
@@ -7,7 +7,9 @@
    ② langBtn+langMenu 12 语切换：点击 .lang-opt → 写 site-lang-v2 → URL ?lang= 同步（replaceState）→ reload
    ③ locales/*.json 12 语言包 + __I18N_VER 版本号 + site-i18n-cache-v{VER}-{LANG} 缓存 + .i18n-pending 防闪烁门控
    ④ html lang/dir 同步（ar 用 rtl）
-   ⑤ JS 动态文案全量走 T(key)，禁硬编码中英文（组件名 name_en/name 为数据字段保留） */
+   ⑤ JS 动态文案全量走 T(key)，禁硬编码中英文（组件名 name_en/name 为数据字段保留）
+   0823-sp-3b：数据积累期诚实展示（组件 uptime 按 data_days 标注 N 天 / 全组件 <7 天横幅「数据采集中」/ 热力图 st-none 保留）
+   + 品牌 Gavin's Lab（全站品牌替换为 Gavin's Lab Status，__I18N_VER 2→3；og:url/canonical/footer 域名 hermes.cc.cd 保留） */
 (function () {
   'use strict';
 
@@ -29,9 +31,10 @@
       failedChecks: '失败次数',
       loadFailed: 'status.json 暂不可用——数据收集中，请稍后查看。',
       time: '时间', result: '结果', latency: '延迟', code: 'HTTP', ok: '成功', fail: '失败', ms: '毫秒',
-      langAria: '选择语言', metaTitle: 'Hermes Status — 服务可用性',
-      metaDescription: 'Hermes 公开服务的实时可用性与 90 天运行历史：官网、OPC API、MRD 面板、博客与 API 网关。',
+      langAria: '选择语言', metaTitle: 'Gavin\'s Lab Status — 服务可用性',
+      metaDescription: 'Gavin\'s Lab 公开服务的实时可用性与 90 天运行历史：官网、OPC API、MRD 面板、博客与 API 网关。',
       timeS: '秒', timeM: '分', timeH: '时', timeD: '天',
+      uptimeBasedOn: '基于 {n} 天', statusHistoryCollected: '（已采集 {n} 天）',
       themeLight: '亮色', themeDark: '暗色'
     },
     en: {
@@ -45,9 +48,10 @@
       failedChecks: 'failed checks',
       loadFailed: 'status.json unavailable — collecting data, please check back soon.',
       time: 'Time', result: 'Result', latency: 'Latency', code: 'HTTP', ok: 'OK', fail: 'FAIL', ms: 'ms',
-      langAria: 'Select language', metaTitle: 'Hermes Status — Service Availability',
-      metaDescription: 'Real-time availability and 90-day uptime history for Hermes public services: website, OPC API, MRD dashboard, blog and API gateway.',
+      langAria: 'Select language', metaTitle: 'Gavin\'s Lab Status — Service Availability',
+      metaDescription: 'Real-time availability and 90-day uptime history for Gavin\'s Lab public services: website, OPC API, MRD dashboard, blog and API gateway.',
       timeS: 's', timeM: 'm', timeH: 'h', timeD: 'd',
+      uptimeBasedOn: 'based on {n} days', statusHistoryCollected: '(collected {n} days)',
       themeLight: 'Light', themeDark: 'Dark'
     }
   };
@@ -289,14 +293,29 @@
 
   /* ---------- renderers（动态文案全量走 t()，禁硬编码中英文） ---------- */
 
+  /* 数据积累期判定（0823-sp-3b）：所有组件 data_days 均 < 7（含 0）→ 数据采集中；
+     任一组件 data_days >= 7 或数据完全无 data_days 字段（老数据兼容）→ 按 probe 真实 overall。
+     判定放页面侧，probe 的 overall 字段语义（真实服务状态）不改。 */
+  function isCollecting(data) {
+    var comps = data.components || [];
+    var anyDD = comps.some(function (c) { return typeof c.data_days === 'number'; });
+    if (!anyDD) return false;
+    return comps.every(function (c) {
+      return (typeof c.data_days === 'number' ? c.data_days : 0) < 7;
+    });
+  }
+
   function renderOverall(data) {
     var el = document.getElementById('overall');
     var dot = document.getElementById('overall-dot');
     var txt = document.getElementById('overall-text');
     var gen = document.getElementById('generated-at');
-    el.className = 'overall overall-' + statusClass(data.overall);
-    dot.className = 'status-dot dot-' + statusClass(data.overall);
-    txt.textContent = data.overall === 'operational' ? t('allOperational')
+    var collecting = isCollecting(data);
+    var st = collecting ? 'unknown' : statusClass(data.overall);
+    el.className = 'overall overall-' + st;
+    dot.className = 'status-dot dot-' + st;
+    txt.textContent = collecting ? t('collecting')
+      : data.overall === 'operational' ? t('allOperational')
       : data.overall === 'degraded' ? t('someDegraded')
       : data.overall === 'down' ? t('systemsDown')
       : t('collecting');
@@ -307,6 +326,19 @@
 
   /* lucide chevron-right：固定 12px，stroke currentColor，禁 unicode 字符图标 */
   var CARET_SVG = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+
+  /* 组件 uptime 值（0823-sp-3b 诚实展示数据积累期）：
+     data_days >= 90 → 常规「99.98%」；0 < data_days < 90 → 「99.98% · 基于 N 天」（100% 也带标注）；
+     data_days == 0 或 uptime_90d 非 number（含 null）→ 「—」（无数据不虚报 %）。 */
+  function uptimeLabel(c) {
+    var dd = typeof c.data_days === 'number' ? c.data_days : 0;
+    if (dd <= 0 || typeof c.uptime_90d !== 'number') return '—';
+    var pct = c.uptime_90d.toFixed(2) + '%';
+    if (dd >= 90) return pct;
+    var note = t('uptimeBasedOn').replace('{n}', dd);
+    if (lang === 'en' && dd === 1) note = note.replace('days', 'day');
+    return pct + ' · ' + note;
+  }
 
   function renderComponents(data) {
     var list = document.getElementById('component-list');
@@ -326,8 +358,7 @@
         '<span class="badge badge-' + st + '">' +
           '<span class="status-dot dot-' + st + '"></span>' + esc(t(st)) + '</span>' +
         '<span class="component-metrics">' +
-          '<span>' + t('uptime90') + ' <b>' +
-            (typeof c.uptime_90d === 'number' ? c.uptime_90d.toFixed(2) + '%' : '—') + '</b></span>' +
+          '<span>' + t('uptime90') + ' <b>' + esc(uptimeLabel(c)) + '</b></span>' +
           '<span>' + t('avgLatency') + ' <b>' +
             (typeof c.latency_avg_ms === 'number' ? Math.round(c.latency_avg_ms) + ' ' + t('ms') : '—') + '</b></span>' +
         '</span>';
@@ -368,6 +399,17 @@
     var root = document.getElementById('history');
     root.innerHTML = '';
     var history = data.history_90d || {};
+    // 0823-sp-3b 区块标题副注（可选增强）：所有组件积累期一致且 >0 → 「90 天可用性历史（已采集 N 天）」
+    var h2 = document.querySelector('[data-i18n="statusHistory"]');
+    if (h2) {
+      var dds = [];
+      (data.components || []).forEach(function (c) {
+        if (typeof c.data_days === 'number') dds.push(c.data_days);
+      });
+      if (dds.length && dds.every(function (v) { return v > 0 && v === dds[0]; })) {
+        h2.textContent = t('statusHistory') + ' ' + t('statusHistoryCollected').replace('{n}', dds[0]);
+      }
+    }
 
     // Anchor the 90-day window on generated_at so the page shares the probe's clock.
     var end = new Date();
@@ -413,9 +455,12 @@
     var incidents = Array.isArray(data.incidents) ? data.incidents.slice() : [];
     incidents.sort(function (a, b) { return String(b.started).localeCompare(String(a.started)); });
     if (!incidents.length) {
+      // 空态强化（0823-sp-3b）：图标 + 文案，明显是「有设计的占位」而非「加载失败」（Gavin 曾反馈空置）
       var empty = document.createElement('div');
-      empty.className = 'empty-state';
-      empty.textContent = t('noIncidents');
+      empty.className = 'empty-state empty-incidents';
+      empty.innerHTML =
+        '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>' +
+        '<span>' + esc(t('noIncidents')) + '</span>';
       list.appendChild(empty);
       return;
     }

@@ -89,7 +89,10 @@ GitHub Actions (schedule */5)  ──►  scripts/probe.cjs  ──►  status.j
 - 所有时间均为 **UTC ISO8601**；跨日边界按 UTC（北京时间 08:00 为界）
 - `latency_avg_ms` = 当日已测延迟均值（整数 ms）
 - `data_days`（int） = 90 天窗口内该组件有数据的自然天数（含当天 live 格；空窗=0）。
-  页面侧据此展示数据积累期（N 天采集横幅/采集期标识等展示规则归页面侧 0823-sp-3b 实现）
+  页面侧据此展示数据积累期（0823-sp-3b）：
+  - 组件行 uptime：data_days>=90 → 常规「99.98%」；0<data_days<90 →「99.98% · 基于 N 天」；
+    data_days=0 或 uptime_90d=null →「—」（无数据不虚报 100%）
+  - 整体横幅：全组件 data_days<7 →「数据采集中…」；任一组件 >=7 → 按 overall 真实状态（判定在 app.js）
 - `uptime_90d`：有数据时（`data_days>0`）为 number（成功天数/有数据天数，degraded 计成功，
   round2）；无数据日（`data_days=0`）为 **null**——空窗不虚报 100%
 
@@ -118,6 +121,9 @@ scripts/probe.cjs                    # 探针 + 状态机 + 累积（唯一写 s
 status.json                          # 页面数据源（仅 Actions 更新）
 test/mock-server.cjs                 # 本地 mock HTTP server（200/5xx/超时可切）
 test/state-machine-test.cjs          # 状态机全链路测试
+test_render.js                     # 页面 DOM smoke 测试（zh/en/missing + window 三窗口）
+gen_mock.py                        # mock fixture 生成器（1/7/90 天三窗口，参数化）
+locales/*.json                     # 12 语言包（键集与 app.js 内置 dict 一致，__I18N_VER 版本化）
 ```
 
 ## 维护

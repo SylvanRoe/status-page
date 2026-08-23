@@ -1,0 +1,361 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-23T11:30:00+00:00",
+  "overall": "down",
+  "components": [
+    {
+      "id": "website",
+      "name": "官网",
+      "name_en": "Website",
+      "url": "https://www.hermes.cc.cd/",
+      "status": "operational",
+      "uptime_90d": 100.0,
+      "data_days": 1,
+      "latency_avg_ms": 120,
+      "last_check": "2026-08-23T11:30:00+00:00",
+      "today_checks": [
+        {
+          "t": "2026-08-23T10:30:00+00:00",
+          "ok": true,
+          "latency_ms": 171,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:35:00+00:00",
+          "ok": true,
+          "latency_ms": 104,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:40:00+00:00",
+          "ok": true,
+          "latency_ms": 93,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:45:00+00:00",
+          "ok": true,
+          "latency_ms": 184,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:50:00+00:00",
+          "ok": true,
+          "latency_ms": 125,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:55:00+00:00",
+          "ok": true,
+          "latency_ms": 121,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:00:00+00:00",
+          "ok": true,
+          "latency_ms": 118,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:05:00+00:00",
+          "ok": true,
+          "latency_ms": 107,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:10:00+00:00",
+          "ok": true,
+          "latency_ms": 184,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:15:00+00:00",
+          "ok": true,
+          "latency_ms": 103,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:20:00+00:00",
+          "ok": true,
+          "latency_ms": 176,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:25:00+00:00",
+          "ok": true,
+          "latency_ms": 184,
+          "code": 200
+        }
+      ]
+    },
+    {
+      "id": "opc",
+      "name": "OPC 透明办公室(API)",
+      "name_en": "OPC Office (API)",
+      "url": "https://opc.hermes.cc.cd/api/token-stats",
+      "status": "down",
+      "uptime_90d": 0.0,
+      "data_days": 1,
+      "latency_avg_ms": 340,
+      "last_check": "2026-08-23T11:30:00+00:00",
+      "today_checks": [
+        {
+          "t": "2026-08-23T10:30:00+00:00",
+          "ok": true,
+          "latency_ms": 379,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:35:00+00:00",
+          "ok": true,
+          "latency_ms": 321,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:40:00+00:00",
+          "ok": true,
+          "latency_ms": 385,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:45:00+00:00",
+          "ok": true,
+          "latency_ms": 364,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:50:00+00:00",
+          "ok": true,
+          "latency_ms": 314,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:55:00+00:00",
+          "ok": true,
+          "latency_ms": 313,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:00:00+00:00",
+          "ok": false,
+          "latency_ms": 321,
+          "code": 0
+        },
+        {
+          "t": "2026-08-23T11:05:00+00:00",
+          "ok": false,
+          "latency_ms": 337,
+          "code": 0
+        },
+        {
+          "t": "2026-08-23T11:10:00+00:00",
+          "ok": false,
+          "latency_ms": 339,
+          "code": 0
+        },
+        {
+          "t": "2026-08-23T11:15:00+00:00",
+          "ok": false,
+          "latency_ms": 374,
+          "code": 0
+        },
+        {
+          "t": "2026-08-23T11:20:00+00:00",
+          "ok": false,
+          "latency_ms": 387,
+          "code": 0
+        },
+        {
+          "t": "2026-08-23T11:25:00+00:00",
+          "ok": false,
+          "latency_ms": 313,
+          "code": 0
+        }
+      ]
+    },
+    {
+      "id": "mrd",
+      "name": "MRD 行情面板",
+      "name_en": "MRD Dashboard",
+      "url": "https://mrd.hermes.cc.cd/",
+      "status": "operational",
+      "uptime_90d": 100.0,
+      "data_days": 1,
+      "latency_avg_ms": 210,
+      "last_check": "2026-08-23T11:30:00+00:00",
+      "today_checks": [
+        {
+          "t": "2026-08-23T10:30:00+00:00",
+          "ok": true,
+          "latency_ms": 251,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:35:00+00:00",
+          "ok": true,
+          "latency_ms": 205,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:40:00+00:00",
+          "ok": true,
+          "latency_ms": 271,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:45:00+00:00",
+          "ok": true,
+          "latency_ms": 263,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:50:00+00:00",
+          "ok": true,
+          "latency_ms": 269,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:55:00+00:00",
+          "ok": true,
+          "latency_ms": 249,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:00:00+00:00",
+          "ok": true,
+          "latency_ms": 233,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:05:00+00:00",
+          "ok": true,
+          "latency_ms": 208,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:10:00+00:00",
+          "ok": true,
+          "latency_ms": 237,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:15:00+00:00",
+          "ok": true,
+          "latency_ms": 255,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:20:00+00:00",
+          "ok": true,
+          "latency_ms": 215,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:25:00+00:00",
+          "ok": true,
+          "latency_ms": 283,
+          "code": 200
+        }
+      ]
+    },
+    {
+      "id": "blog",
+      "name": "官网博客",
+      "name_en": "Blog",
+      "url": "https://www.hermes.cc.cd/blog/",
+      "status": "operational",
+      "uptime_90d": 100.0,
+      "data_days": 1,
+      "latency_avg_ms": 118,
+      "last_check": "2026-08-23T11:30:00+00:00",
+      "today_checks": [
+        {
+          "t": "2026-08-23T10:30:00+00:00",
+          "ok": true,
+          "latency_ms": 88,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:35:00+00:00",
+          "ok": true,
+          "latency_ms": 185,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:40:00+00:00",
+          "ok": true,
+          "latency_ms": 191,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:45:00+00:00",
+          "ok": true,
+          "latency_ms": 108,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:50:00+00:00",
+          "ok": true,
+          "latency_ms": 177,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:55:00+00:00",
+          "ok": true,
+          "latency_ms": 142,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:00:00+00:00",
+          "ok": true,
+          "latency_ms": 131,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:05:00+00:00",
+          "ok": true,
+          "latency_ms": 123,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:10:00+00:00",
+          "ok": true,
+          "latency_ms": 107,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:15:00+00:00",
+          "ok": true,
+          "latency_ms": 115,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:20:00+00:00",
+          "ok": true,
+          "latency_ms": 185,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:25:00+00:00",
+          "ok": true,
+          "latency_ms": 131,
+          "code": 200
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "name": "API 网关",
+      "name_en": "API Gateway",
+      "url": "https://api.hermes.cc.cd/",
+      "status": "unknown",
+      "uptime_90d": null,
+      "data_days": 0,
+      "latency_avg_ms": 460,
+      "last_check": "2026-08-23T11:30:00+00:00",
+      "today_checks": []
+    }
+  ],
+  "history_90d": {},
+  "incidents": []
+}

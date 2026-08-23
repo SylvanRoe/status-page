@@ -1,4 +1,4 @@
-/* Hermes Status — 公司形象页阵营（design-system §0）：slate 灰阶 + 中性强调，
+/* Gavin's Lab Status — 公司形象页阵营（design-system §0）：slate 灰阶 + 中性强调，
    明暗双主题（data-theme 机制，与官网 gavinlab-theme-v2 跨站同步）。
    亮色 --bg 用 slate-50 #f8fafc（与 opc 透明办公室同款仪表盘浅灰底层次，
    design-system §1.2 先例；状态页同为监控仪表盘语境，卡片 #ffffff 在浅灰底上出层次）。
@@ -205,6 +205,9 @@ body {
 .state-resolved { color: var(--green); background: var(--green-soft); }
 .incident-meta { margin-top: 6px; font-size: 13px; color: var(--muted); }
 .empty-state { color: var(--muted); font-size: 14px; padding: 18px; text-align: center; border: 1px dashed var(--border); border-radius: var(--radius-lg); }
+/* 0823-sp-3b 事件空态强化：图标 + 文案垂直居中，明显是「有设计的占位」而非「加载失败」 */
+.empty-incidents { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.empty-incidents svg { opacity: .55; }
 
 .site-footer { margin-top: 48px; text-align: center; font-size: 13px; color: var(--muted); }
 .site-footer a { color: var(--muted); text-decoration: none; }
