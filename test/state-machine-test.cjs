@@ -94,6 +94,33 @@ const compById = (st, id) => st.components.find((c) => c.id === id);
   console.log(`[test] mock on :${port}, status file ${statusFile}`);
 
   try {
+    // ---- 0. 纯函数单元断言：data_days 口径 + uptime_90d 空窗 null ----
+    const probe = require(PROBE);
+    check('单元: 空窗口（无任何 history）→ uptime_90d=null、data_days=0', () => {
+      assert.strictEqual(probe.computeUptime90d({ history_90d: {} }, 'x'), null);
+      assert.strictEqual(probe.computeDataDays({ history_90d: {} }, 'x'), 0);
+    });
+    {
+      // 91 天数据：窗口内 90 天（today-89..today）+ 窗口外 1 天（today-90），窗口内 1 天 down
+      const hist = {};
+      for (let i = 0; i <= 90; i++) hist[isoDaysAgo(90 - i)] = { x: i === 1 ? 'down' : 'operational' };
+      const st90 = { history_90d: hist };
+      check('单元: 90 天窗口内 90 天数据 → data_days=90（窗口外 1 天不计）', () => {
+        assert.strictEqual(probe.computeDataDays(st90, 'x'), 90);
+      });
+      check('单元: 窗口内 1 天 down → uptime=98.89（89/90 保留两位，degraded 计成功）', () => {
+        assert.strictEqual(probe.computeUptime90d(st90, 'x'), 98.89);
+      });
+    }
+    check('单元: initState 新组件 uptime_90d=null、data_days=0', () => {
+      const s0 = probe.initState();
+      assert.ok(s0.components.length >= 1);
+      for (const c of s0.components) {
+        assert.strictEqual(c.uptime_90d, null);
+        assert.strictEqual(c.data_days, 0);
+      }
+    });
+
     // ---- 1. 基线：全 ok → operational，无 incident ----
     setMode(port, 'ok');
     runProbe(statusFile, port);
@@ -114,6 +141,12 @@ const compById = (st, id) => st.components.find((c) => c.id === id);
       }
     });
     check('基线: 无 incidents', () => assert.strictEqual(st.incidents.length, 0));
+    check('基线: data_days=1（首次探测仅今天 live 格）', () => {
+      for (const c of st.components) assert.strictEqual(c.data_days, 1);
+    });
+    check('基线: uptime_90d 有数据（1 天全 ok → 100，非空窗 null）', () => {
+      for (const c of st.components) assert.strictEqual(c.uptime_90d, 100);
+    });
 
     // ---- 2. 5xx → degraded ----
     setMode(port, '500');
@@ -198,6 +231,10 @@ const compById = (st, id) => st.components.find((c) => c.id === id);
       assert.strictEqual(compById(st, 'm1').uptime_90d, 75);
       assert.strictEqual(compById(st, 'm2').uptime_90d, 100);
     });
+    check('uptime: data_days=4（历史 3 天 + 今天 live 格）', () => {
+      assert.strictEqual(compById(st, 'm1').data_days, 4);
+      assert.strictEqual(compById(st, 'm2').data_days, 4);
+    });
 
     // ---- 7. 跨日折叠：昨日 checks 聚合进 history，today_checks 只留当日 ----
     const yDay = isoDaysAgo(1), tDay = isoDaysAgo(0);
@@ -221,6 +258,9 @@ const compById = (st, id) => st.components.find((c) => c.id === id);
     check('折叠: degraded 日计入成功 → m1 uptime=100', () => {
       assert.strictEqual(compById(st, 'm1').uptime_90d, 100);
     });
+    check('折叠: data_days=2（昨日折叠日 + 今天 live 格）', () => {
+      assert.strictEqual(compById(st, 'm1').data_days, 2);
+    });
 
     // ---- 8. 90 天裁剪 ----
     const old = isoDaysAgo(100), keep = isoDaysAgo(89);
@@ -233,6 +273,9 @@ const compById = (st, id) => st.components.find((c) => c.id === id);
     check('裁剪: 100 天前条目被裁，89 天前保留', () => {
       assert.ok(!(old in st.history_90d));
       assert.ok(keep in st.history_90d);
+    });
+    check('裁剪: data_days 仅计窗口内（89 天前 + 今天 = 2，100 天前不计）', () => {
+      assert.strictEqual(compById(st, 'm1').data_days, 2);
     });
 
     // ---- 9. .bak 容错：status.json 损坏时回退备份继续 ----
@@ -249,6 +292,9 @@ const compById = (st, id) => st.components.find((c) => c.id === id);
       assert.strictEqual(st.components.length, beforeBak);
       assert.strictEqual(st.components[0].today_checks.length, 2);
     });
+    check('容错: data_days 字段随重算补齐（=1，仅今天）', () => {
+      assert.strictEqual(st.components[0].data_days, 1);
+    });
 
     // ---- 10. 真实 5 目标探测（仅连通性，不写正式 status.json）----
     const realFile = path.join(tmp, 'status-real.json');
@@ -263,6 +309,7 @@ const compById = (st, id) => st.components.find((c) => c.id === id);
         assert.ok(['website', 'opc', 'mrd', 'blog', 'api'].includes(c.id));
         assert.ok(['operational', 'degraded', 'down'].includes(c.status));
         assert.ok(typeof c.uptime_90d === 'number');
+        assert.ok(typeof c.data_days === 'number' && c.data_days >= 1);
         assert.ok(c.last_check);
         assert.strictEqual(c.today_checks.length, 1);
       }

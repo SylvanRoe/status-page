@@ -44,9 +44,10 @@ GitHub Actions (schedule */5)  ──►  scripts/probe.cjs  ──►  status.j
 - **每日最坏聚合 → `history_90d`**（含当天 live 格，与跨日折叠同规则）：
   今日 checks 全 ok → `operational`；有 degraded 无 down → `degraded`；有 down → `down`。
   供热力图与 uptime（schema 示例中 `history_90d` 含当天日期即此格）。
-- **组件 90 天 uptime**：`成功天数 / 总天数`（degraded 计成功，仅 down 计失败），保留两位小数。
+- **组件 90 天 uptime**：`成功天数 / 有数据天数`（degraded 计成功，仅 down 计失败），保留两位小数。
   > 说明：历史仅保留按日聚合（`history_90d`），因此 uptime 以**天**为粒度计算，
-  > 当天有任一 down 则该日计 0% 成功；无数据日不计入分母。含当天共 90 天窗口。
+  > 当天有任一 down 则该日计 0% 成功；无数据日（`data_days=0`）时 `uptime_90d` 为 **null**
+  > （空窗期诚实展示，不虚报 100%）。含当天共 90 天窗口。
 - **overall**：任一组件 down → `down`；任一 degraded → `degraded`；否则 `operational`
 - **incident 规则**：
   - 组件连续 3 次 down（≈15 分钟）→ 开 incident：`INC-NNN` 递增、`severity=major`、
@@ -70,6 +71,7 @@ GitHub Actions (schedule */5)  ──►  scripts/probe.cjs  ──►  status.j
       "id": "website", "name": "官网", "name_en": "Website", "url": "https://www.hermes.cc.cd/",
       "status": "operational|degraded|down",
       "uptime_90d": 99.98,
+      "data_days": 23,
       "latency_avg_ms": 120,
       "last_check": "ISO8601",
       "today_checks": [{"t":"ISO8601","ok":true,"latency_ms":120,"code":200}]
@@ -85,7 +87,11 @@ GitHub Actions (schedule */5)  ──►  scripts/probe.cjs  ──►  status.j
 - `today_checks[].ok` = 单次检查是否 `ok`（2xx/3xx/4xx）；degraded/down 均为 `false`，由 `code` 区分
   （`code>=500` → degraded，`code=0` → down）
 - 所有时间均为 **UTC ISO8601**；跨日边界按 UTC（北京时间 08:00 为界）
-- `latency_avg_ms` = 当日已测延迟均值（整数 ms）；`uptime_90d` 为 number 类型
+- `latency_avg_ms` = 当日已测延迟均值（整数 ms）
+- `data_days`（int） = 90 天窗口内该组件有数据的自然天数（含当天 live 格；空窗=0）。
+  页面侧据此展示数据积累期（N 天采集横幅/采集期标识等展示规则归页面侧 0823-sp-3b 实现）
+- `uptime_90d`：有数据时（`data_days>0`）为 number（成功天数/有数据天数，degraded 计成功，
+  round2）；无数据日（`data_days=0`）为 **null**——空窗不虚报 100%
 
 ## 本地测试（mock 状态机全链路）
 

@@ -148,7 +148,8 @@ function initState() {
       name_en: c.name_en,
       url: c.url,
       status: 'operational',
-      uptime_90d: 100.0,
+      uptime_90d: null,
+      data_days: 0,
       latency_avg_ms: 0,
       last_check: null,
       today_checks: [],
@@ -183,9 +184,8 @@ function trimHistory(state) {
   }
 }
 
-function computeUptime90d(state, compId) {
-  // 历史仅按日聚合（含当天 live 格），uptime 以天为粒度：成功天数/总天数（degraded 计成功）
-  // 只统计 90 天窗口内（cutoff 起含今天共 90 天，与 trimHistory 同口径），窗口外天数不计入分母
+/** 90 天窗口统计：{ total, success } — 该组件在窗口内（cutoff 起含今天共 90 天，与 trimHistory 同口径）有记录的天数及成功天数 */
+function uptimeWindow(state, compId) {
   const cutoff = addDays(TODAY, -(HISTORY_DAYS - 1));
   let total = 0;
   let success = 0;
@@ -196,7 +196,20 @@ function computeUptime90d(state, compId) {
     total += 1;
     if (dayMap[compId] !== 'down') success += 1;
   }
-  if (total === 0) return 100.0;
+  return { total, success };
+}
+
+/** data_days = 90 天窗口内该组件有数据的自然天数（含当天 live 格；空窗=0） */
+function computeDataDays(state, compId) {
+  return uptimeWindow(state, compId).total;
+}
+
+function computeUptime90d(state, compId) {
+  // 历史仅按日聚合（含当天 live 格），uptime 以天为粒度：成功天数/有数据天数（degraded 计成功）
+  // 只统计 90 天窗口内（cutoff 起含今天共 90 天，与 trimHistory 同口径），窗口外天数不计入分母
+  // 无数据日（data_days=0）→ null（诚实展示采集期，不虚报 100%）
+  const { total, success } = uptimeWindow(state, compId);
+  if (total === 0) return null;
   return round2((success / total) * 100);
 }
 
@@ -269,7 +282,7 @@ async function main() {
       if (!state.components.find((x) => x.id === c.id)) {
         state.components.push({
           id: c.id, name: c.name, name_en: c.name_en, url: c.url,
-          status: 'operational', uptime_90d: 100.0, latency_avg_ms: 0,
+          status: 'operational', uptime_90d: null, data_days: 0, latency_avg_ms: 0,
           last_check: null, today_checks: [],
         });
       }
@@ -290,6 +303,7 @@ async function main() {
     // history_90d 当天 live 格：每日最坏聚合（与跨日折叠同规则），供热力图/uptime
     if (!state.history_90d[TODAY]) state.history_90d[TODAY] = {};
     state.history_90d[TODAY][c.id] = aggregateStatus(comp.today_checks);
+    comp.data_days = computeDataDays(state, c.id);
     comp.uptime_90d = computeUptime90d(state, c.id);
     comp.latency_avg_ms = computeLatencyAvg(comp);
     comp.last_check = r.t;
@@ -318,11 +332,17 @@ async function main() {
   for (const comp of state.components) {
     const last = comp.today_checks[comp.today_checks.length - 1];
     const detail = last ? `${statusOfCode(last.code)} ${last.latency_ms}ms code=${last.code}` : 'no-data';
-    console.log(`[probe]   ${comp.id.padEnd(8)} ${comp.status.padEnd(12)} uptime=${comp.uptime_90d}% avg=${comp.latency_avg_ms}ms ${detail}`);
+    const uptime = comp.uptime_90d === null ? 'n/a' : `${comp.uptime_90d}%`;
+    console.log(`[probe]   ${comp.id.padEnd(8)} ${comp.status.padEnd(12)} uptime=${uptime} days=${comp.data_days} avg=${comp.latency_avg_ms}ms ${detail}`);
   }
 }
 
-main().catch((err) => {
-  console.error('[probe] fatal:', err && err.stack ? err.stack : err);
-  process.exit(1);
-});
+// 导出供单测直接断言纯函数（require 时仅声明函数与常量，不执行探测）
+module.exports = { computeUptime90d, computeDataDays, uptimeWindow, initState };
+
+if (require.main === module) {
+  main().catch((err) => {
+    console.error('[probe] fatal:', err && err.stack ? err.stack : err);
+    process.exit(1);
+  });
+}
