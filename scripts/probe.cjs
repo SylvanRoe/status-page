@@ -17,7 +17,7 @@
  *     仍处失败中 → degraded/down。恢复后状态即回绿（对齐验收「恢复→回绿」）。
  *   每日最坏聚合 → history_90d（含当天 live 格）：今日 checks 全 ok → operational；
  *     有 degraded 无 down → degraded；有 down → down（供热力图/uptime）
- *   组件 90 天 uptime：成功天数/总天数（degraded 计成功，仅 down 计失败），保留两位小数
+ *   组件 90 天 uptime：成功天数/总天数（degraded 计成功，仅 down 计失败，只统计 90 天窗口内天数），保留两位小数
  *   overall：任一 down → down；任一 degraded → degraded；否则 operational
  *   incident：组件连续 3 次 down（≈15 分钟）→ 开 incident（INC-NNN 递增，major，failed_checks 累计）；
  *             连续 2 次 ok → resolved（写入时间）。incidents 只追加不删除，按 started 倒序。
@@ -185,11 +185,14 @@ function trimHistory(state) {
 
 function computeUptime90d(state, compId) {
   // 历史仅按日聚合（含当天 live 格），uptime 以天为粒度：成功天数/总天数（degraded 计成功）
+  // 只统计 90 天窗口内（cutoff 起含今天共 90 天，与 trimHistory 同口径），窗口外天数不计入分母
+  const cutoff = addDays(TODAY, -(HISTORY_DAYS - 1));
   let total = 0;
   let success = 0;
   for (const [d, dayMap] of Object.entries(state.history_90d)) {
     if (typeof dayMap !== 'object' || dayMap === null) continue;
     if (!(compId in dayMap)) continue;
+    if (d < cutoff) continue; // 90 天窗口外不计入
     total += 1;
     if (dayMap[compId] !== 'down') success += 1;
   }
