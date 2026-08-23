@@ -122,8 +122,8 @@ body {
 .history { display: flex; flex-direction: column; gap: 14px; }
 .history-row { display: flex; align-items: center; gap: 12px; }
 .history-label { width: 130px; flex: none; font-size: 13px; color: var(--fg-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.history-cells { display: grid; grid-template-rows: 1fr; grid-auto-flow: column; gap: 2px; flex: 1; }
-.cell { height: 22px; border-radius: 3px; min-width: 3px; }
+.history-cells { display: grid; grid-template-rows: 1fr; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; flex: 1; min-width: 0; }
+.cell { height: 22px; border-radius: 3px; min-width: 0; }
 .cell.st-operational { background: var(--green); }
 .cell.st-degraded { background: var(--yellow); }
 .cell.st-down { background: var(--red); }
@@ -158,6 +158,7 @@ body {
   .overall-inner { font-size: 17px; }
   .component-row { flex-wrap: wrap; gap: 8px; }
   .component-metrics { width: 100%; }
-  .history-label { width: 84px; font-size: 12px; }
+  .history-row { flex-direction: column; align-items: stretch; gap: 6px; }
+  .history-label { width: auto; font-size: 12px; }
   .cell { height: 18px; }
 }
