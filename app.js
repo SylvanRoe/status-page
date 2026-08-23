@@ -1,103 +1,194 @@
 /* Hermes Status — vanilla JS renderer for status.json (schema v1).
-   No frameworks, no external requests except same-origin ./status.json. */
+   No frameworks, no external requests except same-origin ./status.json + ./locales/*.json.
+
+   0823-sp-2 多语言机制对齐官网（company-site/ui.js 公共组件）：
+   ① 语言检测优先级：?lang=xx → localStorage site-lang-v2 → 旧 status-lang（兼容迁移）→ navigator.languages → zh
+   ② langBtn+langMenu 12 语切换：点击 .lang-opt → 写 site-lang-v2 → URL ?lang= 同步（replaceState）→ reload
+   ③ locales/*.json 12 语言包 + __I18N_VER 版本号 + site-i18n-cache-v{VER}-{LANG} 缓存 + .i18n-pending 防闪烁门控
+   ④ html lang/dir 同步（ar 用 rtl）
+   ⑤ JS 动态文案全量走 T(key)，禁硬编码中英文（组件名 name_en/name 为数据字段保留） */
 (function () {
   'use strict';
 
   var REFRESH_MS = 60000;
   var HISTORY_DAYS = 90;
+  var I18N_VER = window.__I18N_VER || 1;
 
+  /* 内置兜底 dict（zh/en 全量；语言包 fetch 失败时保底，永不显示裸 key / undefined）。
+     与 locales/*.json 同键集 —— 改键值须同步 12 语言包并递增 __I18N_VER（多语言铁律）。 */
   var I18N = {
-    en: {
-      collecting: 'Collecting data…',
-      allOperational: 'All systems operational',
-      someDegraded: 'Some systems degraded',
-      systemsDown: 'Systems down',
-      refreshNote: 'Auto-refreshes every 60s',
-      updated: 'Updated',
-      components: 'Components',
-      statusHistory: 'Uptime history (90 days)',
-      incidents: 'Incidents',
-      noIncidents: 'No incidents recorded.',
-      operational: 'Operational',
-      degraded: 'Degraded',
-      down: 'Down',
-      noData: 'No data',
-      unknown: 'Unknown',
-      uptime90: '90d uptime',
-      avgLatency: 'avg latency',
-      lastCheck: 'last check',
-      todayChecks: "Today's checks",
-      noChecksToday: 'No checks recorded today yet.',
-      ongoing: 'Ongoing',
-      resolved: 'Resolved',
-      major: 'major',
-      minor: 'minor',
-      affected: 'Affected',
-      failedChecks: 'failed checks',
-      loadFailed: 'status.json unavailable — collecting data, please check back soon.',
-      time: 'Time',
-      result: 'Result',
-      latency: 'Latency',
-      code: 'HTTP',
-      ok: 'OK',
-      fail: 'FAIL',
-      ms: 'ms'
-    },
     zh: {
-      collecting: '数据收集中…',
-      allOperational: '所有系统正常运行',
-      someDegraded: '部分系统降级',
-      systemsDown: '系统故障',
-      refreshNote: '每 60 秒自动刷新',
-      updated: '更新于',
-      components: '组件',
-      statusHistory: '90 天可用性历史',
-      incidents: '事件记录',
-      noIncidents: '暂无事件记录。',
-      operational: '正常',
-      degraded: '降级',
-      down: '故障',
-      noData: '无数据',
-      unknown: '未知',
-      uptime90: '90 天可用率',
-      avgLatency: '平均延迟',
-      lastCheck: '最近探测',
-      todayChecks: '今日探测明细',
-      noChecksToday: '今日暂无探测记录。',
-      ongoing: '进行中',
-      resolved: '已恢复',
-      major: '严重',
-      minor: '轻微',
-      affected: '影响组件',
+      collecting: '数据收集中…', allOperational: '所有系统正常运行', someDegraded: '部分系统降级',
+      systemsDown: '系统故障', refreshNote: '每 60 秒自动刷新', updated: '更新于',
+      components: '组件', statusHistory: '90 天可用性历史', incidents: '事件记录',
+      noIncidents: '暂无事件记录。', operational: '正常', degraded: '降级', down: '故障',
+      noData: '无数据', unknown: '未知', uptime90: '90 天可用率', avgLatency: '平均延迟',
+      lastCheck: '最近探测', todayChecks: '今日探测明细', noChecksToday: '今日暂无探测记录。',
+      ongoing: '进行中', resolved: '已恢复', major: '严重', minor: '轻微', affected: '影响组件',
       failedChecks: '失败次数',
       loadFailed: 'status.json 暂不可用——数据收集中，请稍后查看。',
-      time: '时间',
-      result: '结果',
-      latency: '延迟',
-      code: 'HTTP',
-      ok: '成功',
-      fail: '失败',
-      ms: '毫秒'
+      time: '时间', result: '结果', latency: '延迟', code: 'HTTP', ok: '成功', fail: '失败', ms: '毫秒',
+      langAria: '选择语言', metaTitle: 'Hermes Status — 服务可用性',
+      metaDescription: 'Hermes 公开服务的实时可用性与 90 天运行历史：官网、OPC API、MRD 面板、博客与 API 网关。',
+      timeS: '秒', timeM: '分', timeH: '时', timeD: '天'
+    },
+    en: {
+      collecting: 'Collecting data…', allOperational: 'All systems operational', someDegraded: 'Some systems degraded',
+      systemsDown: 'Systems down', refreshNote: 'Auto-refreshes every 60s', updated: 'Updated',
+      components: 'Components', statusHistory: 'Uptime history (90 days)', incidents: 'Incidents',
+      noIncidents: 'No incidents recorded.', operational: 'Operational', degraded: 'Degraded', down: 'Down',
+      noData: 'No data', unknown: 'Unknown', uptime90: '90d uptime', avgLatency: 'avg latency',
+      lastCheck: 'last check', todayChecks: "Today's checks", noChecksToday: 'No checks recorded today yet.',
+      ongoing: 'Ongoing', resolved: 'Resolved', major: 'major', minor: 'minor', affected: 'Affected',
+      failedChecks: 'failed checks',
+      loadFailed: 'status.json unavailable — collecting data, please check back soon.',
+      time: 'Time', result: 'Result', latency: 'Latency', code: 'HTTP', ok: 'OK', fail: 'FAIL', ms: 'ms',
+      langAria: 'Select language', metaTitle: 'Hermes Status — Service Availability',
+      metaDescription: 'Real-time availability and 90-day uptime history for Hermes public services: website, OPC API, MRD dashboard, blog and API gateway.',
+      timeS: 's', timeM: 'm', timeH: 'h', timeD: 'd'
     }
   };
 
-  var lang = localStorage.getItem('status-lang') ||
-    ((navigator.language || '').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en');
-  if (!I18N[lang]) lang = 'en';
+  var LANG_MAP = { zh: 1, en: 1, ja: 1, ko: 1, fr: 1, de: 1, ar: 1, ru: 1, es: 1, tr: 1, pl: 1, pt: 1 };
+  var LANG_NAMES = { zh: '中文', en: 'English', ja: '日本語', ko: '한국어', fr: 'Français', de: 'Deutsch', ar: 'العربية', ru: 'Русский', es: 'Español', tr: 'Türkçe', pl: 'Polski', pt: 'Português' };
+  var LOCALE_MAP = { zh: 'zh-CN', en: 'en-US', ja: 'ja-JP', ko: 'ko-KR', fr: 'fr-FR', de: 'de-DE', ar: 'ar', ru: 'ru-RU', es: 'es-ES', tr: 'tr-TR', pl: 'pl-PL', pt: 'pt-PT' };
 
-  function t(key) { return I18N[lang][key] || I18N.en[key] || key; }
+  /* 语言检测（与 index.html head bootstrap 同优先级；__i18nLang 由 head 首帧同步设置，
+     此函数兜底 —— test 环境无 head bootstrap 时也能按 localStorage/navigator 正确判定） */
+  function detectLang() {
+    try { if (window.__i18nLang && LANG_MAP[window.__i18nLang]) return window.__i18nLang; } catch (e) {}
+    try {
+      if (typeof location !== 'undefined') {
+        var qm = location.search.match(/[?&]lang=([a-z]{2})/);
+        if (qm && LANG_MAP[qm[1]]) return qm[1];
+      }
+    } catch (e) {}
+    try { var sv = localStorage.getItem('site-lang-v2'); if (sv && LANG_MAP[sv]) return sv; } catch (e) {}
+    try { var old = localStorage.getItem('status-lang'); if (old && LANG_MAP[old]) return old; } catch (e) {}
+    try {
+      var al = (navigator.languages || [navigator.language || 'zh']).map(function (x) {
+        return String(x).toLowerCase().split('-')[0];
+      });
+      for (var i = 0; i < al.length; i++) { if (LANG_MAP[al[i]]) return al[i]; }
+    } catch (e) {}
+    return 'zh';
+  }
 
+  var lang = detectLang();
+  var DICT = null; // 当前语言包（异步加载后赋值；null = 用内置兜底）
+
+  /* 翻译函数：语言包 → 内置兜底 → 原样 key（永不 undefined） */
+  function t(key) {
+    if (DICT && Object.prototype.hasOwnProperty.call(DICT, key)) return DICT[key];
+    if (I18N[lang] && Object.prototype.hasOwnProperty.call(I18N[lang], key)) return I18N[lang][key];
+    if (I18N.en && Object.prototype.hasOwnProperty.call(I18N.en, key)) return I18N.en[key];
+    return key;
+  }
+  window.T = t; // 对外暴露（与官网一致，公共组件取词入口）
+
+  function locale() { return LOCALE_MAP[lang] || lang; }
+
+  /* ---------- 静态 i18n 应用（title/meta/data-i18n/data-i18n-aria/langCur/html lang/dir） ---------- */
   function applyStaticI18n() {
-    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-    document.title = lang === 'zh'
-      ? 'Hermes Status — 服务可用性'
-      : 'Hermes Status — Service Availability';
+    var de = document.documentElement;
+    if (de) {
+      if (de.setAttribute) {
+        de.setAttribute('lang', lang);
+        de.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+      } else {
+        de.lang = lang; de.dir = lang === 'ar' ? 'rtl' : 'ltr';
+      }
+    }
+    document.title = t('metaTitle');
+    if (document.querySelector) {
+      var m = document.querySelector('meta[name="description"]');
+      if (m) m.setAttribute('content', t('metaDescription'));
+      var og = document.querySelector('meta[property="og:description"]');
+      if (og) og.setAttribute('content', t('metaDescription'));
+      var ogt = document.querySelector('meta[property="og:title"]');
+      if (ogt) ogt.setAttribute('content', t('metaTitle'));
+    }
     var nodes = document.querySelectorAll('[data-i18n]');
     for (var i = 0; i < nodes.length; i++) {
       nodes[i].textContent = t(nodes[i].getAttribute('data-i18n'));
     }
-    var btn = document.getElementById('lang-toggle');
-    btn.textContent = lang === 'zh' ? 'EN' : '中文';
+    var aria = document.querySelectorAll('[data-i18n-aria]');
+    for (var j = 0; j < aria.length; j++) {
+      aria[j].setAttribute('aria-label', t(aria[j].getAttribute('data-i18n-aria')));
+    }
+    var cur = document.getElementById('langCur');
+    if (cur) cur.textContent = LANG_NAMES[lang] || lang;
+  }
+
+  /* ---------- 语言包加载（缓存命中同步应用零闪烁；fetch 失败回退 zh → 内置兜底） ---------- */
+  function applyDict(dict) {
+    DICT = dict && typeof dict === 'object' ? dict : null;
+    var de = document.documentElement;
+    if (de && de.classList && de.classList.remove) de.classList.remove('i18n-pending');
+    applyStaticI18n();
+    load(); // 语言包就绪后再拉 status.json，避免渲染时文案缺失
+  }
+
+  function loadI18n() {
+    var KEY = 'site-i18n-cache-v' + I18N_VER + '-' + lang;
+    if (window.__i18nCachedDict) { // head bootstrap 已命中缓存 → 同步应用
+      try {
+        applyDict(window.__i18nCachedDict);
+        return;
+      } catch (e) {
+        window.__i18nCachedDict = null;
+        try { localStorage.removeItem(KEY); } catch (e2) {}
+      }
+    }
+    if (lang === 'zh') { // zh 内置兜底即全量，无需网络请求
+      applyDict(null);
+      return;
+    }
+    fetch('locales/' + lang + '.json?v=' + I18N_VER)
+      .then(function (r) { if (!r.ok) throw new Error('bad'); return r.json(); })
+      .then(function (dict) {
+        applyDict(dict);
+        try { localStorage.setItem(KEY, JSON.stringify({ lang: lang, ver: I18N_VER, dict: dict })); } catch (e) {}
+      })
+      .catch(function () {
+        var de = document.documentElement;
+        if (de && de.classList && de.classList.remove) de.classList.remove('i18n-pending');
+        return fetch('locales/zh.json?v=' + I18N_VER)
+          .then(function (r) { return r.json(); })
+          .then(applyDict)
+          .catch(function () { applyDict(null); });
+      });
+  }
+
+  /* ---------- langBtn + langMenu（官网同构交互：点击外部关闭、aria、active 高亮、?lang= 同步） ---------- */
+  function initLang() {
+    var langBtn = document.getElementById('langBtn');
+    var langMenu = document.getElementById('langMenu');
+    if (!langBtn || !langMenu) return;
+    langBtn.addEventListener('click', function (e) { e.stopPropagation(); langMenu.classList.toggle('open'); });
+    if (document.addEventListener) {
+      document.addEventListener('click', function () { langMenu.classList.remove('open'); });
+    }
+    langMenu.addEventListener('click', function (e) { e.stopPropagation(); });
+    var opts = langMenu.querySelectorAll ? langMenu.querySelectorAll('.lang-opt') : [];
+    for (var i = 0; i < opts.length; i++) {
+      (function (b) {
+        b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+        b.addEventListener('click', function () {
+          var l = b.getAttribute('data-lang');
+          if (l === lang) { langMenu.classList.remove('open'); return; }
+          try { localStorage.setItem('site-lang-v2', l); } catch (e) {}
+          try { // ?lang= URL 同步（replaceState 保留其它参数），分享链接携带语言、刷新保持
+            if (typeof location !== 'undefined' && history.replaceState) {
+              var u = new URL(location.href);
+              u.searchParams.set('lang', l);
+              history.replaceState(null, '', u.toString());
+            }
+          } catch (e) {}
+          location.reload();
+        });
+      })(opts[i]);
+    }
   }
 
   function esc(s) {
@@ -110,35 +201,35 @@
     if (!iso) return '—';
     var d = new Date(iso);
     if (isNaN(d)) return esc(iso);
-    return d.toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US', { hour12: false });
+    return d.toLocaleString(locale(), { hour12: false });
   }
 
   function fmtDay(isoDate) {
     var d = new Date(isoDate + 'T00:00:00');
     if (isNaN(d)) return isoDate;
-    return d.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US',
-      { year: 'numeric', month: 'short', day: 'numeric' });
+    return d.toLocaleDateString(locale(), { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
   function relTime(iso) {
     var d = new Date(iso);
     if (isNaN(d)) return '';
     var s = Math.max(0, Math.floor((Date.now() - d.getTime()) / 1000));
-    if (s < 60) return s + 's';
-    if (s < 3600) return Math.floor(s / 60) + 'm';
-    if (s < 86400) return Math.floor(s / 3600) + 'h';
-    return Math.floor(s / 86400) + 'd';
+    if (s < 60) return s + t('timeS');
+    if (s < 3600) return Math.floor(s / 60) + t('timeM');
+    if (s < 86400) return Math.floor(s / 3600) + t('timeH');
+    return Math.floor(s / 86400) + t('timeD');
   }
 
   function statusClass(st) {
     return st === 'operational' || st === 'degraded' || st === 'down' ? st : 'unknown';
   }
 
+  /* 组件名：数据字段（name/name_en），非文案 —— zh 用 name，其余语言用 name_en（保留原逻辑） */
   function compName(c) {
     return lang === 'zh' ? (c.name || c.name_en || c.id) : (c.name_en || c.name || c.id);
   }
 
-  /* ---------- renderers ---------- */
+  /* ---------- renderers（动态文案全量走 t()，禁硬编码中英文） ---------- */
 
   function renderOverall(data) {
     var el = document.getElementById('overall');
@@ -320,14 +411,9 @@
       .catch(function () { renderDegraded(); });
   }
 
-  document.getElementById('lang-toggle').addEventListener('click', function () {
-    lang = lang === 'zh' ? 'en' : 'zh';
-    localStorage.setItem('status-lang', lang);
-    applyStaticI18n();
-    load();
-  });
-
+  /* ---------- boot ---------- */
   applyStaticI18n();
-  load();
+  initLang();
+  loadI18n(); // 内部 applyDict → load()；语言包失败也会走兜底渲染
   setInterval(load, REFRESH_MS);
 })();

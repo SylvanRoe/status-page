@@ -1,16 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hermes Status — Service Availability</title>
-<meta name="description" content="Real-time availability and 90-day uptime history for Hermes public services: website, OPC API, MRD dashboard, blog and API gateway.">
+<title>Hermes Status — 服务可用性</title>
+<meta name="description" content="Hermes 公开服务的实时可用性与 90 天运行历史：官网、OPC API、MRD 面板、博客与 API 网关。">
 <meta property="og:title" content="Hermes Status">
-<meta property="og:description" content="Real-time availability and 90-day uptime history for Hermes public services.">
+<meta property="og:description" content="Hermes 公开服务的实时可用性与 90 天运行历史。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://status.hermes.cc.cd/">
 <link rel="canonical" href="https://status.hermes.cc.cd/">
 <link rel="stylesheet" href="./style.css">
+<script>
+/* 0823-sp-2 多语言机制对齐官网：首帧语言检测 + 防闪烁门控（须在 body 渲染前同步执行）。
+   检测优先级：?lang=xx → localStorage site-lang-v2 → 旧 status-lang（兼容迁移）→ navigator.languages → zh。 */
+window.__I18N_VER = 1;
+(function () {
+  'use strict';
+  var map = { zh: 1, en: 1, ja: 1, ko: 1, fr: 1, de: 1, ar: 1, ru: 1, es: 1, tr: 1, pl: 1, pt: 1 };
+  var lang = null;
+  try {
+    var qm = location.search.match(/[?&]lang=([a-z]{2})/);
+    if (qm && map[qm[1]]) lang = qm[1];
+    if (!lang) {
+      var sv = null;
+      try { sv = localStorage.getItem('site-lang-v2'); } catch (e) {}
+      if (sv && map[sv]) lang = sv;
+    }
+    if (!lang) {
+      var old = null;
+      try { old = localStorage.getItem('status-lang'); } catch (e) {}
+      if (old && map[old]) lang = old;
+    }
+    if (!lang) {
+      var al = (navigator.languages || [navigator.language || 'zh']).map(function (x) {
+        return String(x).toLowerCase().split('-')[0];
+      });
+      for (var i = 0; i < al.length; i++) { if (map[al[i]]) { lang = al[i]; break; } }
+      if (!lang) lang = 'zh';
+    }
+  } catch (e) { lang = 'zh'; }
+  window.__i18nLang = lang;
+  document.documentElement.setAttribute('lang', lang);
+  document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+  // 语言包缓存 bootstrap：缓存命中存 __i18nCachedDict 供 app.js 同步应用；非 zh 一律挂 .i18n-pending 门控防中文闪现
+  try {
+    var VER = window.__I18N_VER || 1;
+    var KEY = 'site-i18n-cache-v' + VER + '-' + lang;
+    var c = null;
+    try { c = JSON.parse(localStorage.getItem(KEY)); } catch (e2) { c = null; }
+    var ok = c && typeof c === 'object' && c.dict && typeof c.dict === 'object' &&
+             Object.keys(c.dict).length > 0 && c.lang === lang && c.ver === VER;
+    if (ok) {
+      window.__i18nCachedDict = c.dict;
+    } else {
+      if (c) { try { localStorage.removeItem(KEY); } catch (e3) {} }
+    }
+    if (lang !== 'zh') document.documentElement.classList.add('i18n-pending');
+  } catch (e4) {}
+})();
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -20,7 +69,27 @@
       <span class="brand-name">Hermes <span class="brand-sub">Status</span></span>
     </div>
     <div class="header-actions">
-      <button id="lang-toggle" class="btn-ghost" type="button" aria-label="Switch language">中文</button>
+      <div class="lang-wrap">
+        <button class="btn-ghost" id="langBtn" type="button" aria-label="选择语言" aria-haspopup="listbox" data-i18n-aria="langAria">
+          <svg class="lang-btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span class="lang-cur" id="langCur">中文</span>
+          <svg class="lang-btn-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div class="lang-menu" id="langMenu" role="listbox">
+          <button class="lang-opt" data-lang="zh">中文</button>
+          <button class="lang-opt" data-lang="en">English</button>
+          <button class="lang-opt" data-lang="ja">日本語</button>
+          <button class="lang-opt" data-lang="ko">한국어</button>
+          <button class="lang-opt" data-lang="fr">Français</button>
+          <button class="lang-opt" data-lang="de">Deutsch</button>
+          <button class="lang-opt" data-lang="ar">العربية</button>
+          <button class="lang-opt" data-lang="ru">Русский</button>
+          <button class="lang-opt" data-lang="es">Español</button>
+          <button class="lang-opt" data-lang="tr">Türkçe</button>
+          <button class="lang-opt" data-lang="pl">Polski</button>
+          <button class="lang-opt" data-lang="pt">Português</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -28,36 +97,36 @@
   <section id="overall" class="overall overall-unknown" aria-live="polite">
     <div class="overall-inner">
       <span id="overall-dot" class="status-dot dot-unknown" aria-hidden="true"></span>
-      <span id="overall-text" data-i18n="collecting">Collecting data…</span>
+      <span id="overall-text" data-i18n="collecting">数据收集中…</span>
     </div>
     <div class="overall-meta">
       <span id="generated-at"></span>
       <span class="sep">·</span>
-      <span data-i18n="refreshNote">Auto-refreshes every 60s</span>
+      <span data-i18n="refreshNote">每 60 秒自动刷新</span>
     </div>
   </section>
 
   <!-- Block 2: component list -->
   <section>
-    <h2 class="section-title" data-i18n="components">Components</h2>
+    <h2 class="section-title" data-i18n="components">组件</h2>
     <div id="component-list" class="component-list"></div>
   </section>
 
   <!-- Block 3: 90-day uptime history -->
   <section>
-    <h2 class="section-title" data-i18n="statusHistory">Uptime history (90 days)</h2>
+    <h2 class="section-title" data-i18n="statusHistory">90 天可用性历史</h2>
     <div id="history" class="history"></div>
     <div class="legend">
-      <span class="legend-item"><span class="cell st-operational"></span><span data-i18n="operational">Operational</span></span>
-      <span class="legend-item"><span class="cell st-degraded"></span><span data-i18n="degraded">Degraded</span></span>
-      <span class="legend-item"><span class="cell st-down"></span><span data-i18n="down">Down</span></span>
-      <span class="legend-item"><span class="cell st-none"></span><span data-i18n="noData">No data</span></span>
+      <span class="legend-item"><span class="cell st-operational"></span><span data-i18n="operational">正常</span></span>
+      <span class="legend-item"><span class="cell st-degraded"></span><span data-i18n="degraded">降级</span></span>
+      <span class="legend-item"><span class="cell st-down"></span><span data-i18n="down">故障</span></span>
+      <span class="legend-item"><span class="cell st-none"></span><span data-i18n="noData">无数据</span></span>
     </div>
   </section>
 
   <!-- Block 4: incidents -->
   <section>
-    <h2 class="section-title" data-i18n="incidents">Incidents</h2>
+    <h2 class="section-title" data-i18n="incidents">事件记录</h2>
     <div id="incident-list" class="incident-list"></div>
   </section>
 
