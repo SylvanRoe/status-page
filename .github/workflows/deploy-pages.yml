@@ -4,10 +4,16 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # 探针 workflow（status-probe）push status.json 的 commit 由 GITHUB_TOKEN 生成，
+  # 不会触发 push 事件（GitHub 防循环设计）→ 用 workflow_run 补上自动部署链路
+  workflow_run:
+    workflows: ["status-probe"]
+    types: [completed]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     permissions:
       contents: read
     steps:
