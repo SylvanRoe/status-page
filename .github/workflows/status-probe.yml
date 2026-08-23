@@ -1,0 +1,38 @@
+name: status-probe
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # 每 5 分钟探测一次
+  workflow_dispatch: {}     # 支持手动触发
+
+permissions:
+  contents: write           # 允许 push status.json 回仓库
+
+concurrency:
+  group: probe              # 防重叠：同一时刻只有一个探测 run
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run probe
+        run: node scripts/probe.cjs
+
+      - name: Commit and push status.json
+        run: |
+          git config user.name  "status-probe[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet status.json; then
+            git add status.json
+            git commit -m "probe: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            # 先 rebase 再 push：容忍与页面开发等并行 push 的竞态（concurrency 已防自重叠）
+            git pull --rebase origin main 2>/dev/null || true
+            git push
+          else
+            echo "status.json unchanged, skip commit"
+          fi

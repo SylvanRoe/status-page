@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-23T03:00:00.000Z",
+  "overall": "operational",
+  "components": [
+    {
+      "id": "website",
+      "name": "官网",
+      "name_en": "Website",
+      "url": "https://www.hermes.cc.cd/",
+      "status": "operational",
+      "uptime_90d": 100,
+      "latency_avg_ms": 0,
+      "last_check": null,
+      "today_checks": []
+    },
+    {
+      "id": "opc",
+      "name": "OPC 透明办公室(API)",
+      "name_en": "OPC Office (API)",
+      "url": "https://opc.hermes.cc.cd/api/token-stats",
+      "status": "operational",
+      "uptime_90d": 100,
+      "latency_avg_ms": 0,
+      "last_check": null,
+      "today_checks": []
+    },
+    {
+      "id": "mrd",
+      "name": "MRD 行情面板",
+      "name_en": "MRD Dashboard",
+      "url": "https://mrd.hermes.cc.cd/",
+      "status": "operational",
+      "uptime_90d": 100,
+      "latency_avg_ms": 0,
+      "last_check": null,
+      "today_checks": []
+    },
+    {
+      "id": "blog",
+      "name": "官网博客",
+      "name_en": "Blog",
+      "url": "https://www.hermes.cc.cd/blog/",
+      "status": "operational",
+      "uptime_90d": 100,
+      "latency_avg_ms": 0,
+      "last_check": null,
+      "today_checks": []
+    },
+    {
+      "id": "api",
+      "name": "API 网关(cloudflared 隧道)",
+      "name_en": "API Gateway (Tunnel)",
+      "url": "https://api.hermes.cc.cd/",
+      "status": "operational",
+      "uptime_90d": 100,
+      "latency_avg_ms": 0,
+      "last_check": null,
+      "today_checks": []
+    }
+  ],
+  "history_90d": {},
+  "incidents": []
+}

@@ -1,0 +1,8 @@
+# status.json.bak — 探针写回前的本地备份（不提交）
+status.json.bak
+status.json.tmp
+
+# 常规忽略
+node_modules/
+*.log
+.DS_Store
