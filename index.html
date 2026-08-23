@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hermes Status — Service Availability</title>
+<meta name="description" content="Real-time availability and 90-day uptime history for Hermes public services: website, OPC API, MRD dashboard, blog and API gateway.">
+<meta property="og:title" content="Hermes Status">
+<meta property="og:description" content="Real-time availability and 90-day uptime history for Hermes public services.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://status.hermes.cc.cd/">
+<link rel="canonical" href="https://status.hermes.cc.cd/">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">Hermes <span class="brand-sub">Status</span></span>
+    </div>
+    <div class="header-actions">
+      <button id="lang-toggle" class="btn-ghost" type="button" aria-label="Switch language">中文</button>
+    </div>
+  </header>
+
+  <!-- Block 1: overall banner -->
+  <section id="overall" class="overall overall-unknown" aria-live="polite">
+    <div class="overall-inner">
+      <span id="overall-dot" class="status-dot dot-unknown" aria-hidden="true"></span>
+      <span id="overall-text" data-i18n="collecting">Collecting data…</span>
+    </div>
+    <div class="overall-meta">
+      <span id="generated-at"></span>
+      <span class="sep">·</span>
+      <span data-i18n="refreshNote">Auto-refreshes every 60s</span>
+    </div>
+  </section>
+
+  <!-- Block 2: component list -->
+  <section>
+    <h2 class="section-title" data-i18n="components">Components</h2>
+    <div id="component-list" class="component-list"></div>
+  </section>
+
+  <!-- Block 3: 90-day uptime history -->
+  <section>
+    <h2 class="section-title" data-i18n="statusHistory">Uptime history (90 days)</h2>
+    <div id="history" class="history"></div>
+    <div class="legend">
+      <span class="legend-item"><span class="cell st-operational"></span><span data-i18n="operational">Operational</span></span>
+      <span class="legend-item"><span class="cell st-degraded"></span><span data-i18n="degraded">Degraded</span></span>
+      <span class="legend-item"><span class="cell st-down"></span><span data-i18n="down">Down</span></span>
+      <span class="legend-item"><span class="cell st-none"></span><span data-i18n="noData">No data</span></span>
+    </div>
+  </section>
+
+  <!-- Block 4: incidents -->
+  <section>
+    <h2 class="section-title" data-i18n="incidents">Incidents</h2>
+    <div id="incident-list" class="incident-list"></div>
+  </section>
+
+  <footer class="site-footer">
+    <a href="https://www.hermes.cc.cd/">hermes.cc.cd</a>
+  </footer>
+</div>
+<script src="./app.js"></script>
+</body>
+</html>

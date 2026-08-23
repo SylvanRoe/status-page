@@ -1,0 +1,1095 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-23T11:30:00+00:00",
+  "overall": "down",
+  "components": [
+    {
+      "id": "website",
+      "name": "官网",
+      "name_en": "Website",
+      "url": "https://www.hermes.cc.cd/",
+      "status": "operational",
+      "uptime_90d": 99.98,
+      "latency_avg_ms": 120,
+      "last_check": "2026-08-23T11:30:00+00:00",
+      "today_checks": [
+        {
+          "t": "2026-08-23T10:30:00+00:00",
+          "ok": true,
+          "latency_ms": 110,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:35:00+00:00",
+          "ok": true,
+          "latency_ms": 185,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:40:00+00:00",
+          "ok": true,
+          "latency_ms": 200,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:45:00+00:00",
+          "ok": true,
+          "latency_ms": 150,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:50:00+00:00",
+          "ok": true,
+          "latency_ms": 147,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:55:00+00:00",
+          "ok": true,
+          "latency_ms": 123,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:00:00+00:00",
+          "ok": true,
+          "latency_ms": 186,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:05:00+00:00",
+          "ok": true,
+          "latency_ms": 121,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:10:00+00:00",
+          "ok": true,
+          "latency_ms": 197,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:15:00+00:00",
+          "ok": true,
+          "latency_ms": 171,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:20:00+00:00",
+          "ok": true,
+          "latency_ms": 125,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:25:00+00:00",
+          "ok": true,
+          "latency_ms": 188,
+          "code": 200
+        }
+      ]
+    },
+    {
+      "id": "opc",
+      "name": "OPC 透明办公室(API)",
+      "name_en": "OPC Office (API)",
+      "url": "https://opc.hermes.cc.cd/api/token-stats",
+      "status": "down",
+      "uptime_90d": 97.42,
+      "latency_avg_ms": 340,
+      "last_check": "2026-08-23T11:30:00+00:00",
+      "today_checks": [
+        {
+          "t": "2026-08-23T10:30:00+00:00",
+          "ok": true,
+          "latency_ms": 409,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:35:00+00:00",
+          "ok": true,
+          "latency_ms": 376,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:40:00+00:00",
+          "ok": true,
+          "latency_ms": 372,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:45:00+00:00",
+          "ok": true,
+          "latency_ms": 390,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:50:00+00:00",
+          "ok": true,
+          "latency_ms": 340,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:55:00+00:00",
+          "ok": true,
+          "latency_ms": 345,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:00:00+00:00",
+          "ok": false,
+          "latency_ms": 366,
+          "code": 0
+        },
+        {
+          "t": "2026-08-23T11:05:00+00:00",
+          "ok": false,
+          "latency_ms": 319,
+          "code": 0
+        },
+        {
+          "t": "2026-08-23T11:10:00+00:00",
+          "ok": false,
+          "latency_ms": 401,
+          "code": 0
+        },
+        {
+          "t": "2026-08-23T11:15:00+00:00",
+          "ok": false,
+          "latency_ms": 346,
+          "code": 0
+        },
+        {
+          "t": "2026-08-23T11:20:00+00:00",
+          "ok": false,
+          "latency_ms": 340,
+          "code": 0
+        },
+        {
+          "t": "2026-08-23T11:25:00+00:00",
+          "ok": false,
+          "latency_ms": 344,
+          "code": 0
+        }
+      ]
+    },
+    {
+      "id": "mrd",
+      "name": "MRD 行情面板",
+      "name_en": "MRD Dashboard",
+      "url": "https://mrd.hermes.cc.cd/",
+      "status": "operational",
+      "uptime_90d": 99.95,
+      "latency_avg_ms": 210,
+      "last_check": "2026-08-23T11:30:00+00:00",
+      "today_checks": [
+        {
+          "t": "2026-08-23T10:30:00+00:00",
+          "ok": true,
+          "latency_ms": 222,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:35:00+00:00",
+          "ok": true,
+          "latency_ms": 220,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:40:00+00:00",
+          "ok": true,
+          "latency_ms": 249,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:45:00+00:00",
+          "ok": true,
+          "latency_ms": 190,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:50:00+00:00",
+          "ok": true,
+          "latency_ms": 197,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:55:00+00:00",
+          "ok": true,
+          "latency_ms": 199,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:00:00+00:00",
+          "ok": true,
+          "latency_ms": 209,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:05:00+00:00",
+          "ok": true,
+          "latency_ms": 229,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:10:00+00:00",
+          "ok": true,
+          "latency_ms": 268,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:15:00+00:00",
+          "ok": true,
+          "latency_ms": 199,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:20:00+00:00",
+          "ok": true,
+          "latency_ms": 270,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:25:00+00:00",
+          "ok": true,
+          "latency_ms": 207,
+          "code": 200
+        }
+      ]
+    },
+    {
+      "id": "blog",
+      "name": "官网博客",
+      "name_en": "Blog",
+      "url": "https://www.hermes.cc.cd/blog/",
+      "status": "operational",
+      "uptime_90d": 100.0,
+      "latency_avg_ms": 118,
+      "last_check": "2026-08-23T11:30:00+00:00",
+      "today_checks": [
+        {
+          "t": "2026-08-23T10:30:00+00:00",
+          "ok": true,
+          "latency_ms": 96,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:35:00+00:00",
+          "ok": true,
+          "latency_ms": 141,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:40:00+00:00",
+          "ok": true,
+          "latency_ms": 140,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:45:00+00:00",
+          "ok": true,
+          "latency_ms": 130,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:50:00+00:00",
+          "ok": true,
+          "latency_ms": 157,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:55:00+00:00",
+          "ok": true,
+          "latency_ms": 147,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:00:00+00:00",
+          "ok": true,
+          "latency_ms": 141,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:05:00+00:00",
+          "ok": true,
+          "latency_ms": 95,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:10:00+00:00",
+          "ok": true,
+          "latency_ms": 114,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:15:00+00:00",
+          "ok": true,
+          "latency_ms": 194,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:20:00+00:00",
+          "ok": true,
+          "latency_ms": 141,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:25:00+00:00",
+          "ok": true,
+          "latency_ms": 137,
+          "code": 200
+        }
+      ]
+    },
+    {
+      "id": "api",
+      "name": "API 网关",
+      "name_en": "API Gateway",
+      "url": "https://api.hermes.cc.cd/",
+      "status": "degraded",
+      "uptime_90d": 99.61,
+      "latency_avg_ms": 460,
+      "last_check": "2026-08-23T11:30:00+00:00",
+      "today_checks": [
+        {
+          "t": "2026-08-23T10:30:00+00:00",
+          "ok": true,
+          "latency_ms": 528,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:35:00+00:00",
+          "ok": true,
+          "latency_ms": 504,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:40:00+00:00",
+          "ok": true,
+          "latency_ms": 519,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:45:00+00:00",
+          "ok": true,
+          "latency_ms": 432,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:50:00+00:00",
+          "ok": true,
+          "latency_ms": 539,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T10:55:00+00:00",
+          "ok": true,
+          "latency_ms": 527,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:00:00+00:00",
+          "ok": true,
+          "latency_ms": 503,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:05:00+00:00",
+          "ok": true,
+          "latency_ms": 478,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:10:00+00:00",
+          "ok": true,
+          "latency_ms": 491,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:15:00+00:00",
+          "ok": true,
+          "latency_ms": 430,
+          "code": 200
+        },
+        {
+          "t": "2026-08-23T11:20:00+00:00",
+          "ok": false,
+          "latency_ms": 475,
+          "code": 502
+        },
+        {
+          "t": "2026-08-23T11:25:00+00:00",
+          "ok": true,
+          "latency_ms": 468,
+          "code": 200
+        }
+      ]
+    }
+  ],
+  "history_90d": {
+    "2026-05-25": {
+      "website": "operational",
+      "opc": "degraded",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-05-26": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "degraded"
+    },
+    "2026-05-27": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "degraded",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-05-28": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "degraded"
+    },
+    "2026-05-29": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-05-30": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-05-31": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-01": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-02": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-03": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-04": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-05": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-06": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-07": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-08": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-09": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-10": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-11": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-12": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-13": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-14": {
+      "website": "degraded",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-15": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-16": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-17": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-18": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "down"
+    },
+    "2026-06-19": {
+      "website": "operational",
+      "opc": "degraded",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-20": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-21": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-22": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-23": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-24": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-25": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-26": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-27": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-28": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-29": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-06-30": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-01": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-02": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-03": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-04": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-05": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-06": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-07": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-08": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-09": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-10": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-11": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-12": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-13": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-14": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-15": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-16": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-17": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "degraded"
+    },
+    "2026-07-18": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-19": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-20": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-21": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-22": {
+      "website": "down",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-23": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "degraded",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-24": {
+      "website": "operational",
+      "opc": "down",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-25": {
+      "website": "operational",
+      "opc": "down",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-26": {
+      "website": "operational",
+      "opc": "down",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-27": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-28": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "degraded"
+    },
+    "2026-07-29": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-30": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-07-31": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-01": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "degraded",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-02": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-03": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-04": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-05": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-06": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "down",
+      "api": "operational"
+    },
+    "2026-08-07": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-08": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-09": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-10": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-11": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "down"
+    },
+    "2026-08-12": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-13": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-14": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-15": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-16": {
+      "website": "degraded",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-17": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-18": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "degraded",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-19": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-20": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-21": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "operational"
+    },
+    "2026-08-22": {
+      "website": "operational",
+      "opc": "operational",
+      "mrd": "operational",
+      "blog": "operational",
+      "api": "degraded"
+    }
+  },
+  "incidents": [
+    {
+      "id": "INC-003",
+      "started": "2026-08-23T10:55:00+00:00",
+      "resolved": null,
+      "severity": "major",
+      "affected": [
+        "opc"
+      ],
+      "summary": "OPC API 不可达",
+      "failed_checks": 7
+    },
+    {
+      "id": "INC-002",
+      "started": "2026-08-21T03:10:00+00:00",
+      "resolved": "2026-08-21T03:40:00+00:00",
+      "severity": "minor",
+      "affected": [
+        "api"
+      ],
+      "summary": "API gateway elevated latency",
+      "failed_checks": 3
+    },
+    {
+      "id": "INC-001",
+      "started": "2026-07-25T14:00:00+00:00",
+      "resolved": "2026-07-25T15:20:00+00:00",
+      "severity": "major",
+      "affected": [
+        "opc",
+        "api"
+      ],
+      "summary": "cloudflared 隧道中断",
+      "failed_checks": 16
+    }
+  ]
+}
