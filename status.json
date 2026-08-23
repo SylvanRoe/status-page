@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-23T14:59:54.944Z",
-  "overall": "operational",
+  "generated_at": "2026-08-23T15:31:58.968Z",
+  "overall": "degraded",
   "components": [
     {
       "id": "website",
@@ -10,8 +10,8 @@
       "url": "https://www.hermes.cc.cd/",
       "status": "operational",
       "uptime_90d": 100,
-      "latency_avg_ms": 801,
-      "last_check": "2026-08-23T14:59:55.549Z",
+      "latency_avg_ms": 803,
+      "last_check": "2026-08-23T15:31:59.834Z",
       "today_checks": [
         {
           "t": "2026-08-23T03:43:07.995Z",
@@ -144,6 +144,12 @@
           "ok": true,
           "latency_ms": 599,
           "code": 200
+        },
+        {
+          "t": "2026-08-23T15:31:59.834Z",
+          "ok": true,
+          "latency_ms": 859,
+          "code": 200
         }
       ],
       "data_days": 1
@@ -153,10 +159,10 @@
       "name": "OPC 透明办公室(API)",
       "name_en": "OPC Office (API)",
       "url": "https://opc.hermes.cc.cd/api/token-stats",
-      "status": "operational",
+      "status": "degraded",
       "uptime_90d": 100,
-      "latency_avg_ms": 784,
-      "last_check": "2026-08-23T14:59:58.161Z",
+      "latency_avg_ms": 776,
+      "last_check": "2026-08-23T15:31:59.787Z",
       "today_checks": [
         {
           "t": "2026-08-23T03:43:08.057Z",
@@ -289,6 +295,12 @@
           "ok": true,
           "latency_ms": 3071,
           "code": 200
+        },
+        {
+          "t": "2026-08-23T15:31:59.787Z",
+          "ok": false,
+          "latency_ms": 598,
+          "code": 530
         }
       ],
       "data_days": 1
@@ -298,10 +310,10 @@
       "name": "MRD 行情面板",
       "name_en": "MRD Dashboard",
       "url": "https://mrd.hermes.cc.cd/",
-      "status": "operational",
+      "status": "degraded",
       "uptime_90d": 100,
-      "latency_avg_ms": 1045,
-      "last_check": "2026-08-23T14:59:59.139Z",
+      "latency_avg_ms": 1026,
+      "last_check": "2026-08-23T15:31:59.785Z",
       "today_checks": [
         {
           "t": "2026-08-23T03:43:08.471Z",
@@ -434,6 +446,12 @@
           "ok": true,
           "latency_ms": 4048,
           "code": 200
+        },
+        {
+          "t": "2026-08-23T15:31:59.785Z",
+          "ok": false,
+          "latency_ms": 595,
+          "code": 530
         }
       ],
       "data_days": 1
@@ -445,8 +463,8 @@
       "url": "https://www.hermes.cc.cd/blog/",
       "status": "operational",
       "uptime_90d": 100,
-      "latency_avg_ms": 584,
-      "last_check": "2026-08-23T14:59:55.664Z",
+      "latency_avg_ms": 587,
+      "last_check": "2026-08-23T15:31:59.831Z",
       "today_checks": [
         {
           "t": "2026-08-23T03:43:07.975Z",
@@ -579,6 +597,12 @@
           "ok": true,
           "latency_ms": 571,
           "code": 200
+        },
+        {
+          "t": "2026-08-23T15:31:59.831Z",
+          "ok": true,
+          "latency_ms": 639,
+          "code": 200
         }
       ],
       "data_days": 1
@@ -588,10 +612,10 @@
       "name": "API 网关(cloudflared 隧道)",
       "name_en": "API Gateway (Tunnel)",
       "url": "https://api.hermes.cc.cd/",
-      "status": "operational",
+      "status": "degraded",
       "uptime_90d": 100,
-      "latency_avg_ms": 1152,
-      "last_check": "2026-08-23T14:59:58.160Z",
+      "latency_avg_ms": 1129,
+      "last_check": "2026-08-23T15:31:59.812Z",
       "today_checks": [
         {
           "t": "2026-08-23T03:43:08.315Z",
@@ -724,6 +748,12 @@
           "ok": true,
           "latency_ms": 3066,
           "code": 404
+        },
+        {
+          "t": "2026-08-23T15:31:59.812Z",
+          "ok": false,
+          "latency_ms": 619,
+          "code": 530
         }
       ],
       "data_days": 1
@@ -732,10 +762,10 @@
   "history_90d": {
     "2026-08-23": {
       "website": "operational",
-      "opc": "operational",
-      "mrd": "operational",
+      "opc": "degraded",
+      "mrd": "degraded",
       "blog": "operational",
-      "api": "operational"
+      "api": "degraded"
     }
   },
   "incidents": []
