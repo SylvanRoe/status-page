@@ -1,5 +1,6 @@
 name: Deploy to CF Pages
 # [32c] 2026-08-23 部署链路验证 commit（本行注释仅触发 push 验证，无逻辑变更）
+# [0823-sp-3] 部署缓存链路修复：_headers 短缓存 + ?v=sha 注入 + 部署后 zone purge
 
 on:
   push:
@@ -41,7 +42,7 @@ jobs:
           SHA="${GITHUB_SHA:0:8}"
           sed -i "s|\./style\.css|./style.css?v=${SHA}|; s|\./app\.js|./app.js?v=${SHA}|" dist/index.html
           echo "--- injected asset refs ---"
-          grep -oE '(href|src)="[^"]*\.(css|js)"' dist/index.html
+          grep -oE '(href|src)="[^"]*\.(css|js)[^"]*"' dist/index.html || true
 
       - name: Deploy to Cloudflare Pages
         env:
