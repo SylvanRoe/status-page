@@ -55,22 +55,29 @@ jobs:
             --commit-dirty=true
 
       # [0823-sp-3] 部署后立即 purge zone 缓存（兜底）：即使边缘仍有旧资源残留，
-      # 也保证新版本即刻生效，用户无需手动清缓存/硬刷新
-      - name: Purge Cloudflare zone cache
+      # 也保证新版本即刻生效，用户无需手动清缓存/硬刷新。
+      # best-effort：token 若无 Zone 权限则失败仅警告不标红（核心缓存修复已由 ?v=sha 注入承担）。
+      - name: Purge Cloudflare zone cache (best-effort)
+        continue-on-error: true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          ZONE_ID=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-            "https://api.cloudflare.com/client/v4/zones?name=hermes.cc.cd" \
-            | jq -r '.result[0].id')
-          if [ -z "$ZONE_ID" ] || [ "$ZONE_ID" = "null" ]; then
-            echo "::error::zone hermes.cc.cd not found, aborting"
-            exit 1
+          ZONE_RESP=$(curl -s -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/zones?name=hermes.cc.cd")
+          echo "zones api: $(echo "$ZONE_RESP" | head -c 300)"
+          ZONE_ID=$(echo "$ZONE_RESP" | jq -r '.result[0].id // empty')
+          if [ -z "$ZONE_ID" ]; then
+            echo "::warning::zone hermes.cc.cd not found via API (token may lack Zone:Read). Purge skipped — ?v=sha cache-busting already guarantees fresh assets."
+            exit 0
           fi
           echo "purging zone $ZONE_ID (hermes.cc.cd)"
-          curl -s -X POST -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+          PURGE_RESP=$(curl -s -X POST -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
             -H "Content-Type: application/json" \
             -d '{"purge_everything":true}' \
-            "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/purge_cache" \
-            | jq -e '.success == true'
+            "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/purge_cache")
+          echo "purge api: $(echo "$PURGE_RESP" | head -c 300)"
+          if [ "$(echo "$PURGE_RESP" | jq -r '.success')" != "true" ]; then
+            echo "::warning::zone purge failed (token may lack Zone.Cache Purge). Purge skipped — ?v=sha cache-busting already guarantees fresh assets."
+            exit 0
+          fi
           echo "zone cache purged"

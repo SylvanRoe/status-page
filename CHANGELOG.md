@@ -2,6 +2,14 @@
 
 本仓版本制度（资产版本制度 v1.0，2026-08-23 落地）：版本号 = git tag `vX.Y.Z` + 本文件条目；语义 semver（主.次.补丁）。
 
+## [v0.3.1] - 2026-08-23
+### Fixed
+- 0823-sp-3：部署缓存链路修复（Gavin 反馈「明暗切换没 icon / 多语言下拉平铺」实为部署后仍看缓存旧版，病根 = style.css/app.js `max-age=14400` + ETag REVALIDATED，部署后 4 小时内用户拿旧资源）：
+  - workflow 部署时向 index.html 资源 URL 注入 `?v=<commit sha>`（style.css/app.js）——每次部署 URL 变化，浏览器/边缘强制拉新，部署即时可见（实测：部署后 HTML 带 `?v=8f58a958`、新 URL 边缘 MISS 回源）
+  - 部署后 CF zone purge（best-effort）：token 有 Zone 权限时自动清边缘缓存；无权限仅 warning 不标红（?v=sha 已保证资产新鲜，purge 为兜底）
+  - `_headers` 方案经实测弃用：wrangler pages deploy（direct upload）不上传 `_headers` 文件（CF Pages 已知问题，探针头 X-Sp3-Verify 未出现、`/_headers` 回落 index.html），缓存失效由 ?v=sha 承担
+- 运维待办：CLOUDFLARE_API_TOKEN 缺 Zone:Read / Zone.Cache Purge 权限 → purge 为 best-effort；Gavin 升级 token 权限后无需改代码即全量生效
+
 ## [v0.3.0] - 2026-08-23
 ### Added
 - 0823-sp-3b：数据积累期诚实展示标准（庄子拍板 v1，A+C 组合）：
