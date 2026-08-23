@@ -5,5 +5,7 @@
 #       index.html 里资源 URL 另带 ?v=<sha>（workflow 注入），双保险绕过浏览器+边缘缓存。
 /style.css
   Cache-Control: public, max-age=0, must-revalidate
+  X-Sp3-Verify: cache-fix
 /app.js
   Cache-Control: public, max-age=0, must-revalidate
+  X-Sp3-Verify: cache-fix
