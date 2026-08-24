@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-24T23:10:05.555Z",
+  "generated_at": "2026-08-24T23:36:08.980Z",
   "overall": "operational",
   "components": [
     {
@@ -10,8 +10,8 @@
       "url": "https://www.hermes.cc.cd/",
       "status": "operational",
       "uptime_90d": 100,
-      "latency_avg_ms": 689,
-      "last_check": "2026-08-24T23:10:06.381Z",
+      "latency_avg_ms": 674,
+      "last_check": "2026-08-24T23:36:09.202Z",
       "today_checks": [
         {
           "t": "2026-08-24T00:53:52.274Z",
@@ -198,6 +198,12 @@
           "ok": true,
           "latency_ms": 822,
           "code": 200
+        },
+        {
+          "t": "2026-08-24T23:36:09.202Z",
+          "ok": true,
+          "latency_ms": 216,
+          "code": 200
         }
       ],
       "data_days": 2
@@ -209,8 +215,8 @@
       "url": "https://opc.hermes.cc.cd/api/token-stats",
       "status": "operational",
       "uptime_90d": 100,
-      "latency_avg_ms": 698,
-      "last_check": "2026-08-24T23:10:06.293Z",
+      "latency_avg_ms": 685,
+      "last_check": "2026-08-24T23:36:09.351Z",
       "today_checks": [
         {
           "t": "2026-08-24T00:53:52.507Z",
@@ -397,6 +403,12 @@
           "ok": true,
           "latency_ms": 686,
           "code": 200
+        },
+        {
+          "t": "2026-08-24T23:36:09.351Z",
+          "ok": true,
+          "latency_ms": 292,
+          "code": 200
         }
       ],
       "data_days": 2
@@ -408,8 +420,8 @@
       "url": "https://mrd.hermes.cc.cd/",
       "status": "operational",
       "uptime_90d": 100,
-      "latency_avg_ms": 806,
-      "last_check": "2026-08-24T23:10:06.374Z",
+      "latency_avg_ms": 790,
+      "last_check": "2026-08-24T23:36:09.370Z",
       "today_checks": [
         {
           "t": "2026-08-24T00:53:52.510Z",
@@ -596,6 +608,12 @@
           "ok": true,
           "latency_ms": 765,
           "code": 200
+        },
+        {
+          "t": "2026-08-24T23:36:09.370Z",
+          "ok": true,
+          "latency_ms": 309,
+          "code": 200
         }
       ],
       "data_days": 2
@@ -607,8 +625,8 @@
       "url": "https://www.hermes.cc.cd/blog/",
       "status": "operational",
       "uptime_90d": 100,
-      "latency_avg_ms": 498,
-      "last_check": "2026-08-24T23:10:06.314Z",
+      "latency_avg_ms": 487,
+      "last_check": "2026-08-24T23:36:09.219Z",
       "today_checks": [
         {
           "t": "2026-08-24T00:53:52.294Z",
@@ -795,6 +813,12 @@
           "ok": true,
           "latency_ms": 705,
           "code": 200
+        },
+        {
+          "t": "2026-08-24T23:36:09.219Z",
+          "ok": true,
+          "latency_ms": 156,
+          "code": 200
         }
       ],
       "data_days": 2
@@ -806,8 +830,8 @@
       "url": "https://api.hermes.cc.cd/",
       "status": "operational",
       "uptime_90d": 100,
-      "latency_avg_ms": 921,
-      "last_check": "2026-08-24T23:10:06.999Z",
+      "latency_avg_ms": 901,
+      "last_check": "2026-08-24T23:36:09.361Z",
       "today_checks": [
         {
           "t": "2026-08-24T00:53:52.561Z",
@@ -993,6 +1017,12 @@
           "t": "2026-08-24T23:10:06.999Z",
           "ok": true,
           "latency_ms": 1389,
+          "code": 404
+        },
+        {
+          "t": "2026-08-24T23:36:09.361Z",
+          "ok": true,
+          "latency_ms": 297,
           "code": 404
         }
       ],
